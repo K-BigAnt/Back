@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb:11.4.2
+    restart: on-failure
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: gaeme
+    ports:
+      - 3305:3306
+
+  server:
+    depends_on:
+      - db
+    build:
+      context: .
+    image: gaeme:0.0.0
+    networks:
+      - default
+    restart: on-failure
+    ports:
+      - 80:80

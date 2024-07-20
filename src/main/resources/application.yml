@@ -1,0 +1,5 @@
+server.port: 80
+
+spring:
+  application.name: gaeme
+  config.import: application-local.yml
