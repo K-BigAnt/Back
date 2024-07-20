@@ -38,3 +38,6 @@ out/
 
 ### properties
 **/src/main/resources/application-dev.yml
+
+.DS_Store
+*/.DS_Store
