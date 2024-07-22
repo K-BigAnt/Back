@@ -16,6 +16,8 @@ java {
 }
 
 configurations {
+	asciidoctorExt
+
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -26,7 +28,7 @@ repositories {
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+	snippetsDir = file('build/generated-snippets') // (5)
 }
 
 dependencies {
@@ -47,9 +49,15 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+asciidoctor {
+	configurations 'asciidoctorExt' // (7)
+	baseDirFollowsSourceFile() // (8)
+	inputs.dir snippetsDir // (9)
+	dependsOn test // (10)
+}
+
+asciidoctor.doFirst {
+	delete file('build/docs')  // (11)
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -58,4 +66,9 @@ compileTestJava.options.encoding = 'UTF-8'
 checkstyle {
 	toolVersion = "10.17.0"
 	maxWarnings = 0
+}
+
+
+build {
+	dependsOn asciidoctor
 }
