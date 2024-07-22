@@ -3,6 +3,8 @@ package com.bigant.gaeme.controller;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +42,7 @@ public class TempControllerTest {
     }
 
     private RestDocumentationResultHandler helloWorldResultHandler() {
-        return document("/get",
+        return document("helloworld/get",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())
         );

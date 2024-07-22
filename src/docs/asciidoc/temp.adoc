@@ -1,4 +1,5 @@
 == Temp
 
 === HelloWorld
-operation::/get[snippets="http-request,http-response"]
+
+operation::helloworld/get[snippets="http-request,http-response"]
