@@ -41,7 +41,7 @@ public class TempControllerTest {
     }
 
     private RestDocumentationResultHandler helloWorldResultHandler() {
-        return document("/get",
+        return document("hello-world/get",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())
         );
