@@ -1,12 +1,17 @@
 package com.bigant.gaeme.repository.entity;
 
+import com.bigant.gaeme.repository.enums.StockType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +34,7 @@ public abstract class Stock {
 
     private String symbol;
 
-    private String type;
+    @Enumerated(value = EnumType.STRING)
+    private StockType type;
 
 }
