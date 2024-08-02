@@ -47,6 +47,10 @@ public class UsStockDao implements StockDao<UsStockItem> {
             throw new IllegalStateException("미국 주식 정보를 가져오는데 실패했습니다.");
         }
 
+        response.getBody().getData().getData().getRows().forEach(row ->
+            row.setCountry("United States")
+        );
+
         return response.getBody().getData().getData().getRows();
     }
 
