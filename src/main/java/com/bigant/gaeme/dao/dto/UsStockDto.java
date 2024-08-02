@@ -4,9 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
@@ -14,12 +12,15 @@ import lombok.experimental.SuperBuilder;
 @Builder
 public class UsStockDto {
 
-    @EqualsAndHashCode(callSuper = true)
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    @SuperBuilder
-    public static class UsStockItem extends StockDto {
+    @Builder
+    public static class UsStockItem {
+
+        private String symbol;
+
+        private String name;
 
         private String country;
 
