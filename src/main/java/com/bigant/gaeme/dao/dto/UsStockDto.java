@@ -21,10 +21,6 @@ public class UsStockDto {
     @SuperBuilder
     public static class UsStockItem extends StockDto {
 
-        private String symbol;
-
-        private String name;
-
         private String country;
 
     }
