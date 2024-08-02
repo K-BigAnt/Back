@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public abstract class StockDto {
 
-    @JsonAlias({"itmsNm", "name"})
+    @JsonAlias({"itmsNm", "name", "companyName"})
     private String name;
 
     @JsonAlias({"srtnCd", "symbol"})
