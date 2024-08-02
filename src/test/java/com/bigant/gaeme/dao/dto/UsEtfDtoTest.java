@@ -20,7 +20,7 @@ public class UsEtfDtoTest {
     }
 
     @Test
-    void 미국_Etf_Json_파싱() throws JsonProcessingException {
+    void 미국_ETF_Json_파싱() throws JsonProcessingException {
         String json = """
                 {
                     "data": {
