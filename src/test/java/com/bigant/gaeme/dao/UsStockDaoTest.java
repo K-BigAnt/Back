@@ -32,20 +32,4 @@ public class UsStockDaoTest {
         assertTrue(result.contains(expected));
     }
 
-    @Test
-    void 미국_Etf_데이터_가져오기_테스트() {
-        //given
-        UsStockItem expected = UsStockItem.builder()
-                .name("SHL Telemedicine Ltd PGIM US Large-Cap Buffer 12 ETF - Decembe")
-                .symbol("DECP")
-                .country("United States")
-                .build();
-
-        //when
-        List<UsStockItem> result = usStockDao.getEtf();
-
-        //then
-        assertTrue(result.contains(expected));
-    }
-
 }

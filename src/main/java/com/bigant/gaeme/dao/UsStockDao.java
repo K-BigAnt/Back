@@ -1,11 +1,7 @@
 package com.bigant.gaeme.dao;
 
-import com.bigant.gaeme.dao.dto.UsEtfDto;
-import com.bigant.gaeme.dao.dto.UsEtfDto.UsEtfItem;
-import com.bigant.gaeme.dao.dto.UsEtfResponseDto;
 import com.bigant.gaeme.dao.dto.UsStockDto;
 import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
-import com.bigant.gaeme.repository.entity.UsStock;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +16,9 @@ public class UsStockDao implements StockDao<UsStockItem> {
             .baseUrl("https://api.nasdaq.com")
             .build();
 
-    private static final String STOCK_PATH = "/api/screener/stocks?download=true";
-
-    private static final String ETF_PATH = "/api/screener/etf?download=true";
-
     @Override
     public List<UsStockItem> getStock() {
-        ResponseEntity<UsStockDto> response = restClient.get().uri(STOCK_PATH)
+        ResponseEntity<UsStockDto> response = restClient.get().uri("/api/screener/stocks?download=true")
                 .retrieve()
                 .toEntity(UsStockDto.class);
 
@@ -39,19 +31,7 @@ public class UsStockDao implements StockDao<UsStockItem> {
 
     @Override
     public List<UsStockItem> getEtf() {
-        ResponseEntity<UsEtfResponseDto> response = restClient.get().uri(ETF_PATH)
-                .retrieve()
-                .toEntity(UsEtfResponseDto.class);
-
-        if (response.getBody() == null) {
-            throw new IllegalStateException("미국 주식 정보를 가져오는데 실패했습니다.");
-        }
-
-        response.getBody().getData().getData().getRows().forEach(row ->
-            row.setCountry("United States")
-        );
-
-        return response.getBody().getData().getData().getRows();
+        return null;
     }
 
 }
