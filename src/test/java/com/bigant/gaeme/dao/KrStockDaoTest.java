@@ -23,7 +23,7 @@ public class KrStockDaoTest {
         KrStockDto stock = KrStockDto.builder()
                 .isinCode("KR7000020008")
                 .name("동화약품")
-                .shortenCode("A000020")
+                .symbol("A000020")
                 .build();
 
         //when
@@ -39,7 +39,7 @@ public class KrStockDaoTest {
         KrStockDto etf = KrStockDto.builder()
                 .isinCode("KR7069500007")
                 .name("KODEX 200")
-                .shortenCode("069500")
+                .symbol("069500")
                 .build();
 
         //when
