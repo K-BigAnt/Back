@@ -24,8 +24,6 @@ public class KrStock extends Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean isDelisting;
-
     private String isinCode;
 
 }
