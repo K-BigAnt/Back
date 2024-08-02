@@ -1,5 +1,7 @@
 package com.bigant.gaeme.dao.dto;
 
+import com.bigant.gaeme.repository.entity.UsStock;
+import com.bigant.gaeme.repository.enums.StockType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +24,16 @@ public class UsStockDto {
     public static class UsStockItem extends StockDto {
 
         private String country;
+
+        public UsStock toEntity(StockType type) {
+            return UsStock.builder()
+                    .name(this.getName())
+                    .country(this.getCountry())
+                    .isDelisting(false)
+                    .symbol(this.getSymbol())
+                    .type(type)
+                    .build();
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
+import com.bigant.gaeme.dao.dto.KrStockDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +26,13 @@ public class KrStock extends Stock {
     private Long id;
 
     private String isinCode;
+
+    public KrStockDto toDto() {
+        return KrStockDto.builder()
+                .name(this.getName())
+                .symbol(this.getSymbol())
+                .isinCode(this.isinCode)
+                .build();
+    }
 
 }
