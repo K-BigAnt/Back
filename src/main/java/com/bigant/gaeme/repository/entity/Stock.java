@@ -1,5 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
+import com.bigant.gaeme.dao.dto.StockDto;
 import com.bigant.gaeme.repository.enums.StockType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -38,5 +39,7 @@ public abstract class Stock {
 
     @Enumerated(value = EnumType.STRING)
     private StockType type;
+
+    public abstract StockDto toDto();
 
 }

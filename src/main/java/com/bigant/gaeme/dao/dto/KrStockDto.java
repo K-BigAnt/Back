@@ -19,6 +19,7 @@ public class KrStockDto extends StockDto {
     @JsonProperty("isinCd")
     private String isinCode;
 
+    @Override
     public KrStock toEntity(StockType type) {
         return KrStock.builder()
                 .name(this.getName())

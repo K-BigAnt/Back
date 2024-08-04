@@ -11,6 +11,7 @@ import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.repository.enums.StockType;
+import com.bigant.gaeme.usecase.StockDataUsecase;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+@SuppressWarnings("NonAsciiCharacters")
 @DataJpaTest
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -41,11 +43,17 @@ public class StockDataServiceTest {
 
     private StockDataService stockDataService;
 
+    private StockDataUsecase<KrStock, KrStockRepository> krStockUsecase;
+
+    private StockDataUsecase<UsStock, UsStockRepository> usStockUsecase;
+
     @BeforeEach
     void setup() {
-        krStockDao = Mockito.mock(KrStockDao.class);
-        usStockDao = Mockito.mock(UsStockDao.class);
-        stockDataService = new StockDataService(krStockDao, usStockDao, krStockRepository, usStockRepository);
+        this.krStockDao = Mockito.mock(KrStockDao.class);
+        this.usStockDao = Mockito.mock(UsStockDao.class);
+        this.krStockUsecase = new StockDataUsecase<>(krStockRepository);
+        this.usStockUsecase = new StockDataUsecase<>(usStockRepository);
+        this.stockDataService = new StockDataService(krStockUsecase, usStockUsecase, krStockDao, usStockDao);
     }
 
     @Test

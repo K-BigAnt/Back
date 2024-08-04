@@ -1,11 +1,9 @@
 package com.bigant.gaeme.dao;
 
-import com.bigant.gaeme.dao.dto.UsEtfDto;
-import com.bigant.gaeme.dao.dto.UsEtfDto.UsEtfItem;
 import com.bigant.gaeme.dao.dto.UsEtfResponseDto;
 import com.bigant.gaeme.dao.dto.UsStockDto;
 import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
-import com.bigant.gaeme.repository.entity.UsStock;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
