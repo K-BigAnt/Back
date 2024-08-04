@@ -2,15 +2,13 @@ package com.bigant.gaeme.usecase;
 
 import com.bigant.gaeme.repository.entity.Stock;
 import com.bigant.gaeme.repository.enums.StockType;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class StockDataUsecase<T extends Stock, R extends JpaRepository<T, Long>> {

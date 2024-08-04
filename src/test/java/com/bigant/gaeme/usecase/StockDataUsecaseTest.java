@@ -1,18 +1,13 @@
 package com.bigant.gaeme.usecase;
 
-import com.bigant.gaeme.dao.KrStockDao;
-import com.bigant.gaeme.dao.dto.KrStockDto;
 import com.bigant.gaeme.repository.KrStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
-import com.bigant.gaeme.repository.entity.Stock;
-import com.bigant.gaeme.repository.enums.StockType;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
