@@ -10,8 +10,9 @@ import com.bigant.gaeme.usecase.StockDataUsecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Configurable
+@Configuration
 @RequiredArgsConstructor
 public class GaemeConfig {
 
