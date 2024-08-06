@@ -34,6 +34,8 @@ public abstract class Stock {
 
     private String symbol;
 
+    private boolean isDelisting;
+
     @Enumerated(value = EnumType.STRING)
     private StockType type;
 

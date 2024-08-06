@@ -18,12 +18,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class KrStock extends Stock {
+public class UsStock extends Stock {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String isinCode;
+    private String country;
 
 }
