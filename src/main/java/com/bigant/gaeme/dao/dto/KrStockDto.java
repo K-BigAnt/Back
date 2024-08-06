@@ -1,9 +1,9 @@
 package com.bigant.gaeme.dao.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.bigant.gaeme.repository.entity.KrStock;
+import com.bigant.gaeme.repository.enums.StockType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,15 @@ public class KrStockDto extends StockDto {
 
     @JsonProperty("isinCd")
     private String isinCode;
+
+    public KrStock toEntity(StockType type) {
+        return KrStock.builder()
+                .name(this.getName())
+                .symbol(this.getSymbol())
+                .isinCode(this.isinCode)
+                .isDelisting(false)
+                .type(type)
+                .build();
+    }
 
 }

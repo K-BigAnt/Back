@@ -1,5 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
+import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +26,13 @@ public class UsStock extends Stock {
     private Long id;
 
     private String country;
+
+    public UsStockItem toDto() {
+        return UsStockItem.builder()
+                .name(this.getName())
+                .symbol(this.getSymbol())
+                .country(this.getCountry())
+                .build();
+    }
 
 }
