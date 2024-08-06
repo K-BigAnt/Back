@@ -30,6 +30,6 @@ clean:
 	docker rmi gaeme:0.0.0
 
 restdoc:
-	$(BUILD) asciidoc
+	$(BUILD) asciidoctor
 
 re: clean all
