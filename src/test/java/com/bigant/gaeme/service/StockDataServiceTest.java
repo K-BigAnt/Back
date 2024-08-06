@@ -43,12 +43,12 @@ public class StockDataServiceTest {
         //given
         Mockito.doReturn(List.of(KrStockDto.builder()
                 .name("stock")
-                .shortenCode("abc")
+                .symbol("abc")
                 .isinCode("abcd")
                 .build())).when(krStockDao).getStock();
         Mockito.doReturn(List.of(KrStockDto.builder()
                 .name("etf")
-                .shortenCode("def")
+                .symbol("def")
                 .isinCode("defg")
                 .build())).when(krStockDao).getEtf();
 
@@ -92,13 +92,13 @@ public class StockDataServiceTest {
                 .build());
         Mockito.doReturn(List.of(KrStockDto.builder()
                         .name("stock2")
-                        .shortenCode("def")
+                        .symbol("def")
                         .isinCode("defg")
                         .build(),
                 KrStockDto.builder()
                         .name("stock1")
                         .isinCode("abc")
-                        .shortenCode("abc")
+                        .symbol("abc")
                         .build()
         )).when(krStockDao).getStock();
 
@@ -143,7 +143,7 @@ public class StockDataServiceTest {
                 .build());
         Mockito.doReturn(List.of(KrStockDto.builder()
                         .name("stock2")
-                        .shortenCode("def")
+                        .symbol("def")
                         .isinCode("defg")
                         .build()
         )).when(krStockDao).getStock();

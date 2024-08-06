@@ -5,7 +5,9 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
@@ -13,11 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UsEtfDto {
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
-    public static class UsEtfItem {
+    @SuperBuilder
+    public static class UsEtfItem extends StockDto {
 
         private String symbol;
 

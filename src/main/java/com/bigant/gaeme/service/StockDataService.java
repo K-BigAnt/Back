@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StockDataService {
 
-    private final StockDao krStockDao;
+    private final StockDao<KrStockDto> krStockDao;
 
     private final KrStockRepository krStockRepository;
 
@@ -44,7 +44,7 @@ public class StockDataService {
     }
 
     private void delistStocks(List<KrStockDto> stocks) {
-        List<KrStock> delistingStocks = krStockRepository.findAllBySymbolIn(stocks.stream().map(KrStockDto::getShortenCode).toList());
+        List<KrStock> delistingStocks = krStockRepository.findAllBySymbolIn(stocks.stream().map(KrStockDto::getSymbol).toList());
 
         delistingStocks.forEach(delistingStock -> delistingStock.setDelisting(true));
 
@@ -54,14 +54,14 @@ public class StockDataService {
     private KrStockDto toKrStockDto(KrStock stock) {
         return KrStockDto.builder()
                 .name(stock.getName())
-                .shortenCode(stock.getSymbol())
+                .symbol(stock.getSymbol())
                 .isinCode(stock.getIsinCode()).build();
     }
 
     private KrStock toKrStock(KrStockDto dto, boolean isDelisting, StockType type) {
         return KrStock.builder()
                 .name(dto.getName())
-                .symbol(dto.getShortenCode())
+                .symbol(dto.getSymbol())
                 .isinCode(dto.getIsinCode())
                 .isDelisting(isDelisting)
                 .type(type)

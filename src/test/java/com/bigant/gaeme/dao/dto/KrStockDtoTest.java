@@ -38,7 +38,7 @@ public class KrStockDtoTest {
         assertEquals(KrStockDto.builder()
                 .name("동화약품")
                 .isinCode("KR7000020008")
-                .shortenCode("A000020").build(), result);
+                .symbol("A000020").build(), result);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class KrStockDtoTest {
         assertEquals(KrStockDto.builder()
                 .name("KODEX 반도체")
                 .isinCode("KR7091160002")
-                .shortenCode("091160").build(), result);
+                .symbol("091160").build(), result);
     }
 
 }
