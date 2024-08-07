@@ -3,9 +3,13 @@ package com.bigant.gaeme.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.bigant.gaeme.dao.KrStockDao;
+import com.bigant.gaeme.dao.UsStockDao;
 import com.bigant.gaeme.dao.dto.KrStockDto;
+import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
 import com.bigant.gaeme.repository.KrStockRepository;
+import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
+import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.repository.enums.StockType;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -28,14 +32,20 @@ public class StockDataServiceTest {
     @Autowired
     private KrStockRepository krStockRepository;
 
+    @Autowired
+    private UsStockRepository usStockRepository;
+
     private KrStockDao krStockDao;
+
+    private UsStockDao usStockDao;
 
     private StockDataService stockDataService;
 
     @BeforeEach
     void setup() {
         krStockDao = Mockito.mock(KrStockDao.class);
-        stockDataService = new StockDataService(krStockDao, krStockRepository);
+        usStockDao = Mockito.mock(UsStockDao.class);
+        stockDataService = new StockDataService(krStockDao, usStockDao, krStockRepository, usStockRepository);
     }
 
     @Test
@@ -53,7 +63,7 @@ public class StockDataServiceTest {
                 .build())).when(krStockDao).getEtf();
 
         //when
-        stockDataService.saveData();
+        stockDataService.saveKrStockData();
         List<KrStock> result = krStockRepository.findAll();
 
         //then
@@ -103,7 +113,7 @@ public class StockDataServiceTest {
         )).when(krStockDao).getStock();
 
         //when
-        stockDataService.saveData();
+        stockDataService.saveKrStockData();
         List<KrStock> result = krStockRepository.findAll();
 
 
@@ -149,7 +159,7 @@ public class StockDataServiceTest {
         )).when(krStockDao).getStock();
 
         //when
-        stockDataService.saveData();
+        stockDataService.saveKrStockData();
         List<KrStock> result = krStockRepository.findAll();
 
         //then
@@ -176,5 +186,142 @@ public class StockDataServiceTest {
         );
     }
 
+    @Test
+    void 기존_데이터_없을때_미국_주식_데이터_저장_테스트() {
+        //given
+        Mockito.doReturn(List.of(UsStockItem.builder()
+                .name("stock")
+                .symbol("abc")
+                .country("abcd")
+                .build())).when(usStockDao).getStock();
+        Mockito.doReturn(List.of(UsStockItem.builder()
+                .name("etf")
+                .symbol("def")
+                .country("defg")
+                .build())).when(usStockDao).getEtf();
+
+        //when
+        stockDataService.saveUsStockData();
+        List<UsStock> result = usStockRepository.findAll();
+
+        //then
+        assertEquals(
+                List.of(
+                        UsStock.builder()
+                                .id(result.get(0).getId())
+                                .name("stock")
+                                .symbol("abc")
+                                .country("abcd")
+                                .type(StockType.STOCK)
+                                .isDelisting(false)
+                                .build(),
+                        UsStock.builder()
+                                .id(result.get(1).getId())
+                                .name("etf")
+                                .symbol("def")
+                                .country("defg")
+                                .type(StockType.ETF)
+                                .isDelisting(false)
+                                .build()
+                ),
+                result
+        );
+    }
+
+    @Test
+    void 기존_데이터_존재할때_미국주식_상장폐지_되는_경우() {
+        //given
+        usStockRepository.save(UsStock.builder()
+                .name("stock1")
+                .country("abc")
+                .symbol("abc")
+                .isDelisting(false)
+                .type(StockType.STOCK)
+                .build());
+        Mockito.doReturn(List.of(UsStockItem.builder()
+                .name("stock2")
+                .symbol("def")
+                .country("defg")
+                .build()
+        )).when(usStockDao).getStock();
+
+        //when
+        stockDataService.saveUsStockData();
+        List<UsStock> result = usStockRepository.findAll();
+
+        //then
+        assertEquals(
+                List.of(
+                        UsStock.builder()
+                                .id(result.get(0).getId())
+                                .name("stock1")
+                                .symbol("abc")
+                                .country("abc")
+                                .type(StockType.STOCK)
+                                .isDelisting(true)
+                                .build(),
+                        UsStock.builder()
+                                .id(result.get(1).getId())
+                                .name("stock2")
+                                .symbol("def")
+                                .country("defg")
+                                .type(StockType.STOCK)
+                                .isDelisting(false)
+                                .build()
+                ),
+                result
+        );
+    }
+
+    @Test
+    void 기존_데이터_존재할때_미국주식_데이터_추가() {
+        //given
+        usStockRepository.save(UsStock.builder()
+                .name("stock1")
+                .country("abc")
+                .symbol("abc")
+                .isDelisting(false)
+                .type(StockType.STOCK)
+                .build());
+        Mockito.doReturn(List.of(UsStockItem.builder()
+                        .name("stock2")
+                        .symbol("def")
+                        .country("defg")
+                        .build(),
+                UsStockItem.builder()
+                        .name("stock1")
+                        .country("abc")
+                        .symbol("abc")
+                        .build()
+        )).when(usStockDao).getStock();
+
+        //when
+        stockDataService.saveUsStockData();
+        List<UsStock> result = usStockRepository.findAll();
+
+
+        //then
+        assertEquals(
+                List.of(
+                        UsStock.builder()
+                                .id(result.get(0).getId())
+                                .name("stock1")
+                                .symbol("abc")
+                                .country("abc")
+                                .type(StockType.STOCK)
+                                .isDelisting(false)
+                                .build(),
+                        UsStock.builder()
+                                .id(result.get(1).getId())
+                                .name("stock2")
+                                .symbol("def")
+                                .country("defg")
+                                .type(StockType.STOCK)
+                                .isDelisting(false)
+                                .build()
+                ),
+                result
+        );
+    }
 
 }

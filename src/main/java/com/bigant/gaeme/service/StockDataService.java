@@ -2,8 +2,11 @@ package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.dao.StockDao;
 import com.bigant.gaeme.dao.dto.KrStockDto;
+import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
 import com.bigant.gaeme.repository.KrStockRepository;
+import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
+import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.repository.enums.StockType;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -20,27 +23,53 @@ public class StockDataService {
 
     private final StockDao<KrStockDto> krStockDao;
 
+    private final StockDao<UsStockItem> usStockDao;
+
     private final KrStockRepository krStockRepository;
+
+    private final UsStockRepository usStockRepository;
 
     @Scheduled(cron = "* * 23 * * 3")
     @Transactional
-    public void saveData() {
-        saveStockData(krStockDao::getStock, StockType.STOCK);
-        saveStockData(krStockDao::getEtf, StockType.ETF);
+    public void saveKrStockData() {
+        saveKrStock(krStockDao::getStock, StockType.STOCK);
+        saveKrStock(krStockDao::getEtf, StockType.ETF);
     }
 
-    private void saveStockData(Supplier<List<KrStockDto>> dataFunc, StockType type) {
+    @Scheduled(cron = "* * 11 * * 3")
+    @Transactional
+    public void saveUsStockData() {
+        saveUsStock(usStockDao::getStock, StockType.STOCK);
+        saveUsStock(usStockDao::getEtf, StockType.ETF);
+    }
+
+    private void saveKrStock(Supplier<List<KrStockDto>> dataFunc, StockType type) {
         List<KrStockDto> newStocks = dataFunc.get();
         Set<KrStockDto> exists = krStockRepository.findAll().stream()
                 .filter(stock -> stock.getType() == type)
-                .map(this::toKrStockDto)
+                .map(KrStock::toDto)
                 .collect(Collectors.toSet());
+
         List<KrStockDto> addStocks = newStocks.stream().filter(item -> !exists.contains(item)).toList();
         List<KrStockDto> delistingStocks = exists.stream().filter(item -> !newStocks.contains(item)).toList();
 
-        krStockRepository.saveAll(addStocks.stream().map(stock -> toKrStock(stock, false, type)).toList());
+        krStockRepository.saveAll(addStocks.stream().map(stock -> stock.toEntity(type)).toList());
 
         delistStocks(delistingStocks);
+    }
+
+    private void saveUsStock(Supplier<List<UsStockItem>> dataFunc, StockType type) {
+        List<UsStockItem> newStocks = dataFunc.get();
+        Set<UsStockItem> exists = usStockRepository.findAll().stream()
+                .filter(stock -> stock.getType() == type)
+                .map(UsStock::toDto)
+                .collect(Collectors.toSet());
+
+        List<UsStockItem> addStocks = newStocks.stream().filter(item -> !exists.contains(item)).toList();
+        List<UsStockItem> delistingStocks = exists.stream().filter(item -> !newStocks.contains(item)).toList();
+
+        usStockRepository.saveAll(addStocks.stream().map(stock -> stock.toEntity(type)).toList());
+        delistUsStocks(delistingStocks);
     }
 
     private void delistStocks(List<KrStockDto> stocks) {
@@ -51,21 +80,12 @@ public class StockDataService {
         krStockRepository.saveAll(delistingStocks);
     }
 
-    private KrStockDto toKrStockDto(KrStock stock) {
-        return KrStockDto.builder()
-                .name(stock.getName())
-                .symbol(stock.getSymbol())
-                .isinCode(stock.getIsinCode()).build();
-    }
+    private void delistUsStocks(List<UsStockItem> stocks) {
+        List<UsStock> delistingStocks = usStockRepository.findAllBySymbolIn(stocks.stream().map(UsStockItem::getSymbol).toList());
 
-    private KrStock toKrStock(KrStockDto dto, boolean isDelisting, StockType type) {
-        return KrStock.builder()
-                .name(dto.getName())
-                .symbol(dto.getSymbol())
-                .isinCode(dto.getIsinCode())
-                .isDelisting(isDelisting)
-                .type(type)
-                .build();
+        delistingStocks.forEach(delistingStock -> delistingStock.setDelisting(true));
+
+        usStockRepository.saveAll(delistingStocks);
     }
 
 }
