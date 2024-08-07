@@ -1,7 +1,9 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dao.OauthClient;
 import com.bigant.gaeme.repository.enums.AuthCorp;
+import com.bigant.gaeme.usecase.GoogleAuthUsecase;
+import com.bigant.gaeme.usecase.KakaoAuthUsecase;
+import com.bigant.gaeme.usecase.NaverAuthUsecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +11,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OauthService {
 
-    private final OauthClient kakaoOauthClient;
+    private final KakaoAuthUsecase kakaoAuthUsecase;
 
-    private final OauthClient naverOauthClient;
+    private final NaverAuthUsecase naverAuthUsecase;
 
-    private final OauthClient googleOauthClient;
+    private final GoogleAuthUsecase googleAuthUsecase;
 
     public String getAuthUri(String redirectUri, AuthCorp authCorp) {
         return switch (authCorp) {
-            case KAKAO -> kakaoOauthClient.getAuthUri(redirectUri).toString();
-            case NAVER -> naverOauthClient.getAuthUri(redirectUri).toString();
-            case GOOGLE -> googleOauthClient.getAuthUri(redirectUri).toString();
+            case KAKAO -> kakaoAuthUsecase.getAuthUri(redirectUri);
+            case NAVER -> naverAuthUsecase.getAuthUri(redirectUri);
+            case GOOGLE -> googleAuthUsecase.getAuthUri(redirectUri);
+        };
+    }
+
+    public AuthResponseDto signInOrSignUp(String redirectUri, String authCode, AuthCorp authCorp) {
+        return switch (authCorp) {
+            case KAKAO -> kakaoAuthUsecase.signInOrSignUp(redirectUri, authCode);
+            case NAVER -> naverAuthUsecase.signInOrSignUp(redirectUri, authCode);
+            case GOOGLE -> googleAuthUsecase.signInOrSignUp(redirectUri, authCode);
         };
     }
 

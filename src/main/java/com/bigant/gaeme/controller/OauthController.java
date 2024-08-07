@@ -1,14 +1,11 @@
 package com.bigant.gaeme.controller;
 
 import com.bigant.gaeme.repository.enums.AuthCorp;
+import com.bigant.gaeme.service.AuthResponseDto;
 import com.bigant.gaeme.service.OauthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -32,6 +29,15 @@ public class OauthController {
         } catch (Exception e) {
             throw new IllegalStateException("OAuth 인증에 실패했습니다.", e);
         }
+    }
+
+    @PostMapping("/{auth_corp}")
+    public AuthResponseDto signInOrSignUp(
+            @PathVariable("auth_corp") AuthCorp authCorp,
+            @RequestParam String code,
+            @RequestParam("redirect_uri") String redirectUri
+    ) {
+        return oauthService.signInOrSignUp(redirectUri, code, authCorp);
     }
 
 }
