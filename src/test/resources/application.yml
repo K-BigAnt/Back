@@ -31,3 +31,9 @@ oauth:
     client_id: naver_id
     clinet_secret: naver_secret
     auth_path: /oauth2.0/authorize
+  google:
+    base_url: https://accounts.google.com
+    client_id: google_id
+    client_secret: google_secret
+    auth_path: /o/oauth2/v2/auth
+    scope: https://www.googleapis.com/auth/drive.metadata.readonly
