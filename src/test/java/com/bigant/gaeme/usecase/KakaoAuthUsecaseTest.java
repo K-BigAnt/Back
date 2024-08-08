@@ -38,10 +38,10 @@ public class KakaoAuthUsecaseTest {
     void 유저_정보_파싱_성공() {
         //given
         String json = """
-            {
-                "id": "1234"
-            }
-        """;
+                {
+                    "id": "1234"
+                }
+                """;
 
         //when
         String result = authUsecase.exportOauthId(json);

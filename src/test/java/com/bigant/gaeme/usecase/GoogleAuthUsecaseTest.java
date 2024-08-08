@@ -38,10 +38,10 @@ public class GoogleAuthUsecaseTest {
     void 유저_정보_파싱_성공() {
         //given
         String json = """
-            {
-                "sub": "1234567"
-            }
-        """;
+                    {
+                        "sub": "1234567"
+                    }
+                """;
 
         //when
         String result = authUsecase.exportOauthId(json);
