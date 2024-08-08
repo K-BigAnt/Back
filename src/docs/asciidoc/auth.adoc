@@ -1,0 +1,6 @@
+== Auth
+
+=== 인가코드 요청
+operation::auth/get[snippets="http-request,path-parameters,query-parameters"]
+==== redirect_uri에 code 쿼리 파라미터로 인가 코드가 전달됩니다.
+
