@@ -1,5 +1,7 @@
 package com.bigant.gaeme.dao.dto;
 
+import com.bigant.gaeme.repository.entity.Stock;
+import com.bigant.gaeme.repository.enums.StockType;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +19,7 @@ public abstract class StockDto {
 
     @JsonAlias({"srtnCd", "symbol"})
     private String symbol;
+
+    public abstract Stock toEntity(StockType type);
 
 }

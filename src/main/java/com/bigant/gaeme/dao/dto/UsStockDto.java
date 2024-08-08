@@ -25,6 +25,7 @@ public class UsStockDto {
 
         private String country;
 
+        @Override
         public UsStock toEntity(StockType type) {
             return UsStock.builder()
                     .name(this.getName())

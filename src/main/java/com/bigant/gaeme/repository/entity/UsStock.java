@@ -27,6 +27,7 @@ public class UsStock extends Stock {
 
     private String country;
 
+    @Override
     public UsStockItem toDto() {
         return UsStockItem.builder()
                 .name(this.getName())

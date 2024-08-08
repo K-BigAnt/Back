@@ -15,7 +15,7 @@ import org.springframework.web.client.RestClient;
 
 @Repository
 @RequiredArgsConstructor
-public class KrStockDao implements StockDao {
+public class KrStockDao implements StockDao<KrStockDto> {
 
     private final String BASE_URL = "https://apis.data.go.kr";
 
