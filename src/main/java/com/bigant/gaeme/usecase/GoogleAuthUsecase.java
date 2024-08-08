@@ -15,7 +15,9 @@ public class GoogleAuthUsecase extends AuthUsecase {
 
     @Override
     protected String exportOauthId(String json) {
-        return exportJsonField(json, "sub");
+        String idWithDoubleQuote = exportJsonField(json, "sub");
+
+        return idWithDoubleQuote.substring(1, idWithDoubleQuote.length() - 1);
     }
 
 }

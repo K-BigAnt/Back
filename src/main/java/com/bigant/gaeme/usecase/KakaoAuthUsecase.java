@@ -17,7 +17,9 @@ public class KakaoAuthUsecase extends AuthUsecase {
 
     @Override
     protected String exportOauthId(String json) {
-        return exportJsonField(json, "id");
+        String idWithDoubleQuote = exportJsonField(json, "id");
+
+        return idWithDoubleQuote.substring(1, idWithDoubleQuote.length() - 1);
     }
 
 }

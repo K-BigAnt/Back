@@ -16,8 +16,9 @@ public class NaverAuthUsecase extends AuthUsecase {
     @Override
     protected String exportOauthId(String json) {
         String dataJson = exportJsonField(json, "response");
+        String idWithDoubleQuote = exportJsonField(dataJson, "id");
 
-        return exportJsonField(dataJson, "id");
+        return idWithDoubleQuote.substring(1, idWithDoubleQuote.length() - 1);
     }
 
 }
