@@ -1,6 +1,6 @@
 package com.bigant.gaeme.dao.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StockPriceResponseDto {
 
-    @JsonProperty("output2")
+    @JsonAlias({"prices", "output2"})
     private List<StockPriceDto> prices;
 
 }
