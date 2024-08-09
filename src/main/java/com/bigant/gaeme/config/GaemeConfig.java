@@ -31,45 +31,57 @@ public class GaemeConfig {
 
     @Bean
     public OauthClient kakaoOauthClient(
-            @Value("${oauth.kakao.base_url}") String baseUrl,
+            @Value("${oauth.kakao.auth_url}") String authUrl,
+            @Value("${oauth.kakao.token_url}") String tokenUrl,
+            @Value("${oauth.kakao.info_url}") String infoUrl,
             @Value("${oauth.kakao.client_id}") String clientId,
-            @Value("${oauth.kakao.auth_path}") String authPath
+            @Value("${oauth.kakao.client_secret}") String clientSecret
     ) {
         return new OauthClient(
-                baseUrl,
                 clientId,
-                authPath,
-                null
+                clientSecret,
+                null,
+                authUrl,
+                tokenUrl,
+                infoUrl
         );
     }
 
     @Bean
     public OauthClient naverOauthClient(
-            @Value("${oauth.naver.base_url}") String baseUrl,
+            @Value("${oauth.naver.auth_url}") String authUrl,
+            @Value("${oauth.naver.token_url}") String tokenUrl,
+            @Value("${oauth.naver.info_url}") String infoUrl,
             @Value("${oauth.naver.client_id}") String clientId,
-            @Value("${oauth.naver.auth_path}") String authPath
+            @Value("${oauth.naver.client_secret}") String clientSecret
     ) {
         return new OauthClient(
-                baseUrl,
                 clientId,
-                authPath,
-                null
+                clientSecret,
+                null,
+                authUrl,
+                tokenUrl,
+                infoUrl
         );
     }
 
     @Bean
     public OauthClient googleOauthClient(
-            @Value("${oauth.google.base_url}") String baseUrl,
+            @Value("${oauth.google.auth_url}") String authUrl,
+            @Value("${oauth.google.token_url}") String tokenUrl,
+            @Value("${oauth.google.info_url}") String infoUrl,
             @Value("${oauth.google.client_id}") String clientId,
-            @Value("${oauth.google.auth_path}") String authPath,
+            @Value("${oauth.google.client_secret}") String clientSecret,
             @Value("${oauth.google.scope}") String scope
 
     ) {
         return new OauthClient(
-                baseUrl,
                 clientId,
-                authPath,
-                scope
+                clientSecret,
+                scope,
+                authUrl,
+                tokenUrl,
+                infoUrl
         );
     }
 
