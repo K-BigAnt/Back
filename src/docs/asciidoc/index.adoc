@@ -7,3 +7,4 @@
 include::temp.adoc[]
 include::auth.adoc[]
 include::user.adoc[]
+include::stock.adoc[]
