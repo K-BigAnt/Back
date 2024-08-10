@@ -48,7 +48,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return userRepository.existsById(userId);
         }
 
-        return true ;
+        return true;
     }
 
 }
