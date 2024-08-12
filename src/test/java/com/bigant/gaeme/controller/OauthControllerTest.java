@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bigant.gaeme.config.InterceptorTestConfig;
 import com.bigant.gaeme.repository.enums.AuthCorp;
 import com.bigant.gaeme.service.AuthResponseDto;
 import com.bigant.gaeme.service.OauthService;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -34,6 +36,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs(uriPort = 80)
 @ExtendWith(RestDocumentationExtension.class)
+@Import(InterceptorTestConfig.class)
 public class OauthControllerTest {
 
     @Autowired
