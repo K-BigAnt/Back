@@ -10,12 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigant.gaeme.config.InterceptorTestConfig;
+import com.bigant.gaeme.dao.dto.StockSearchDto;
+import com.bigant.gaeme.repository.enums.StockType;
+import com.bigant.gaeme.service.StockService;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -32,6 +38,9 @@ public class StockControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private StockService stockService;
 
     @Test
     @WithMockUser
@@ -60,6 +69,44 @@ public class StockControllerTest {
                         parameterWithName("end_date").description("검색 종료 일자")
                     )
             );
+    }
+
+    @Test
+    @WithMockUser
+    void searchStock() throws Exception {
+        //given
+        BDDMockito.given(stockService.searchStock(BDDMockito.any())).willReturn(
+                List.of(StockSearchDto.builder()
+                        .name("abcd")
+                        .symbol("abcd")
+                        .type(StockType.ETF)
+                        .country("South Korea")
+                        .build(),
+                StockSearchDto.builder()
+                        .name("erery")
+                        .symbol("abcd")
+                        .type(StockType.STOCK)
+                        .country("China")
+                        .build())
+        );
+
+        //when
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/stock")
+                .queryParam("query", "bc"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(getStockSearchGetResultHandler());
+
+        //then
+        BDDMockito.then(stockService).should().searchStock(BDDMockito.any());
+    }
+
+    private RestDocumentationResultHandler getStockSearchGetResultHandler() {
+        return document("stock-search/get",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                queryParameters(parameterWithName("query").description("검색어"))
+        );
     }
 
 }

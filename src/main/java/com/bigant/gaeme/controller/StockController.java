@@ -1,9 +1,9 @@
 package com.bigant.gaeme.controller;
 
 import com.bigant.gaeme.dao.dto.StockPriceResponseDto;
+import com.bigant.gaeme.dao.dto.StockSearchDto;
+import com.bigant.gaeme.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class StockController {
 
     private final ObjectMapper objectMapper;
+
+    private final StockService stockService;
+
+    @GetMapping
+    public List<StockSearchDto> searchStock(@RequestParam String query) {
+        return stockService.searchStock(query);
+    }
 
     @GetMapping("/price")
     public StockPriceResponseDto getStockPrices(
