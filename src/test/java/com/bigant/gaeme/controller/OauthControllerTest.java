@@ -50,7 +50,7 @@ public class OauthControllerTest {
 
     @Test
     public void getAuthCodeTest() throws Exception {
-        BDDMockito.given(oauthService.getAuthUri("http://localhost/auth/callback", AuthCorp.KAKAO))
+        BDDMockito.given(oauthService.getAuthUri(AuthCorp.KAKAO))
                 .willReturn("http://localhost/oauth/authorize?client_id=kakao_id&response_type=code&redirect_uri=http://localhost/auth/callback");
 
         mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/auth/{auth_corp}", "kakao")

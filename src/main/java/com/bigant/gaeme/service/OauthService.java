@@ -17,11 +17,11 @@ public class OauthService {
 
     private final GoogleAuthUsecase googleAuthUsecase;
 
-    public String getAuthUri(String redirectUri, AuthCorp authCorp) {
+    public String getAuthUri(AuthCorp authCorp) {
         return switch (authCorp) {
-            case KAKAO -> kakaoAuthUsecase.getAuthUri(redirectUri);
-            case NAVER -> naverAuthUsecase.getAuthUri(redirectUri);
-            case GOOGLE -> googleAuthUsecase.getAuthUri(redirectUri);
+            case KAKAO -> kakaoAuthUsecase.getAuthUri();
+            case NAVER -> naverAuthUsecase.getAuthUri();
+            case GOOGLE -> googleAuthUsecase.getAuthUri();
         };
     }
 

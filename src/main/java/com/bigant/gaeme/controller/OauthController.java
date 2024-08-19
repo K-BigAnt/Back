@@ -17,10 +17,9 @@ public class OauthController {
     @GetMapping("/{auth_corp}")
     public void authorize(
             @PathVariable("auth_corp") AuthCorp authCorp,
-            @RequestParam("redirect_uri") String redirectUri,
             HttpServletResponse response
     ) {
-        redirectToAuthPage(response, oauthService.getAuthUri(redirectUri, authCorp));
+        redirectToAuthPage(response, oauthService.getAuthUri(authCorp));
     }
 
     private void redirectToAuthPage(HttpServletResponse response, String authUri) {
