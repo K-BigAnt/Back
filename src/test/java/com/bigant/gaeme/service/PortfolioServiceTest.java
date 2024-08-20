@@ -7,13 +7,12 @@ import com.bigant.gaeme.repository.StockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.Portfolio;
 import com.bigant.gaeme.repository.entity.UsStock;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -28,7 +27,11 @@ public class PortfolioServiceTest {
     private final PortfolioService portfolioService;
 
     @Autowired
-    public PortfolioServiceTest(PortfolioRepository portfolioRepository, StockRepository stockRepository, PortfolioStockRepository portfolioStockRepository) {
+    public PortfolioServiceTest(
+            PortfolioRepository portfolioRepository,
+            StockRepository stockRepository,
+            PortfolioStockRepository portfolioStockRepository
+    ) {
         this.portfolioRepository = portfolioRepository;
         this.stockRepository = stockRepository;
         this.portfolioStockRepository = portfolioStockRepository;
@@ -67,7 +70,7 @@ public class PortfolioServiceTest {
                         .isDelisting(false)
                         .country("US")
                         .build()
-                ));
+        ));
 
         //when
         List<Long> ids = portfolioService.createPortfolio(dtos);
