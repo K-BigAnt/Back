@@ -1,7 +1,7 @@
 package com.bigant.gaeme.controller;
 
+import com.bigant.gaeme.dao.dto.AuthResponseDto;
 import com.bigant.gaeme.repository.enums.AuthCorp;
-import com.bigant.gaeme.service.AuthResponseDto;
 import com.bigant.gaeme.service.OauthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
