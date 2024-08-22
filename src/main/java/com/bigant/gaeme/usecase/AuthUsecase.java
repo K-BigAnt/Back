@@ -22,12 +22,12 @@ public abstract class AuthUsecase {
 
     private final ObjectMapper objectMapper;
 
-    public final String getAuthUri(String redirectUri) {
-        return oauthClient.getAuthUri(redirectUri).toString();
+    public final String getAuthUri() {
+        return oauthClient.getAuthUri().toString();
     }
 
-    public final AuthResponseDto signInOrSignUp(String redirectUri, String authCode) {
-        String accessToken = oauthClient.getAccessToken(authCode, redirectUri);
+    public final AuthResponseDto signInOrSignUp(String authCode) {
+        String accessToken = oauthClient.getAccessToken(authCode);
         String rawUserInfoJson = oauthClient.getUserInfo(accessToken);
         String oauthId = exportOauthId(rawUserInfoJson);
         Optional<User> user = userRepository.findByOauthId(oauthId);

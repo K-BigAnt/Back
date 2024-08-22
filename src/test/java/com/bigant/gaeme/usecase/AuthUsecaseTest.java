@@ -9,7 +9,6 @@ import com.bigant.gaeme.repository.entity.User;
 import com.bigant.gaeme.service.AuthResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -46,7 +45,7 @@ public class AuthUsecaseTest {
     @Test
     void 회원가입_성공() {
         //given
-        BDDMockito.given(oauthClient.getAccessToken(BDDMockito.any(), BDDMockito.any())).willReturn("token");
+        BDDMockito.given(oauthClient.getAccessToken(BDDMockito.any())).willReturn("token");
         BDDMockito.given(oauthClient.getUserInfo(Mockito.any())).willReturn("""
             {
                 "id": "abcd"
@@ -54,7 +53,7 @@ public class AuthUsecaseTest {
             """);
 
         //when
-        AuthResponseDto result = authUsecase.signInOrSignUp("redirectUri", "authCode");
+        AuthResponseDto result = authUsecase.signInOrSignUp("authCode");
         User user = userRepository.findByOauthId("abcd").get();
 
         //then
@@ -74,7 +73,7 @@ public class AuthUsecaseTest {
                 .oauthId("abcd")
                 .nickname("nick")
                 .build());
-        BDDMockito.given(oauthClient.getAccessToken(BDDMockito.any(), BDDMockito.any())).willReturn("token");
+        BDDMockito.given(oauthClient.getAccessToken(BDDMockito.any())).willReturn("token");
         BDDMockito.given(oauthClient.getUserInfo(Mockito.any())).willReturn("""
             {
                 "id": "abcd"
@@ -82,7 +81,7 @@ public class AuthUsecaseTest {
             """);
 
         //when
-        AuthResponseDto result = authUsecase.signInOrSignUp("redirectUri", "authCode");
+        AuthResponseDto result = authUsecase.signInOrSignUp("authCode");
 
         //then
         Assertions.assertEquals(
