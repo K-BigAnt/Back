@@ -33,10 +33,9 @@ public class OauthController {
     @PostMapping("/{auth_corp}")
     public AuthResponseDto signInOrSignUp(
             @PathVariable("auth_corp") AuthCorp authCorp,
-            @RequestParam String code,
-            @RequestParam("redirect_uri") String redirectUri
+            @RequestParam String code
     ) {
-        return oauthService.signInOrSignUp(redirectUri, code, authCorp);
+        return oauthService.signInOrSignUp(code, authCorp);
     }
 
 }

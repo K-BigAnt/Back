@@ -25,11 +25,11 @@ public class OauthService {
         };
     }
 
-    public AuthResponseDto signInOrSignUp(String redirectUri, String authCode, AuthCorp authCorp) {
+    public AuthResponseDto signInOrSignUp(String authCode, AuthCorp authCorp) {
         return switch (authCorp) {
-            case KAKAO -> kakaoAuthUsecase.signInOrSignUp(redirectUri, authCode);
-            case NAVER -> naverAuthUsecase.signInOrSignUp(redirectUri, authCode);
-            case GOOGLE -> googleAuthUsecase.signInOrSignUp(redirectUri, authCode);
+            case KAKAO -> kakaoAuthUsecase.signInOrSignUp(authCode);
+            case NAVER -> naverAuthUsecase.signInOrSignUp(authCode);
+            case GOOGLE -> googleAuthUsecase.signInOrSignUp(authCode);
         };
     }
 

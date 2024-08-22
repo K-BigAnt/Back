@@ -82,7 +82,7 @@ public class OauthControllerTest {
                 .token("jwt token")
                 .isSignIn(true)
                 .build();
-        BDDMockito.given(oauthService.signInOrSignUp(BDDMockito.any(), BDDMockito.any(), BDDMockito.any()))
+        BDDMockito.given(oauthService.signInOrSignUp(BDDMockito.any(), BDDMockito.any()))
                 .willReturn(result);
 
         mockMvc.perform(RestDocumentationRequestBuilders.post("/v1/auth/{auth_corp}", "naver")
@@ -93,7 +93,7 @@ public class OauthControllerTest {
                 .andDo(getSignInOrSignUpPostResultHandler())
                 .andDo(print());
 
-        BDDMockito.verify(oauthService).signInOrSignUp("http://localhost/auth/callback", "auth_code_blahblah", AuthCorp.NAVER);
+        BDDMockito.verify(oauthService).signInOrSignUp("auth_code_blahblah", AuthCorp.NAVER);
     }
 
     private ResultHandler getSignInOrSignUpPostResultHandler() {

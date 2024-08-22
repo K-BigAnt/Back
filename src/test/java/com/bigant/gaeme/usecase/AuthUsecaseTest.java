@@ -53,7 +53,7 @@ public class AuthUsecaseTest {
             """);
 
         //when
-        AuthResponseDto result = authUsecase.signInOrSignUp("redirectUri", "authCode");
+        AuthResponseDto result = authUsecase.signInOrSignUp("authCode");
         User user = userRepository.findByOauthId("abcd").get();
 
         //then
@@ -81,7 +81,7 @@ public class AuthUsecaseTest {
             """);
 
         //when
-        AuthResponseDto result = authUsecase.signInOrSignUp("redirectUri", "authCode");
+        AuthResponseDto result = authUsecase.signInOrSignUp("authCode");
 
         //then
         Assertions.assertEquals(

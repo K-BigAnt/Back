@@ -26,7 +26,7 @@ public abstract class AuthUsecase {
         return oauthClient.getAuthUri().toString();
     }
 
-    public final AuthResponseDto signInOrSignUp(String redirectUri, String authCode) {
+    public final AuthResponseDto signInOrSignUp(String authCode) {
         String accessToken = oauthClient.getAccessToken(authCode);
         String rawUserInfoJson = oauthClient.getUserInfo(accessToken);
         String oauthId = exportOauthId(rawUserInfoJson);
