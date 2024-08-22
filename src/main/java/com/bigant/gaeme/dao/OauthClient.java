@@ -25,15 +25,17 @@ public class OauthClient {
 
     private final String infoUrl;
 
+    private final String redirectUri;
+
     private final RestClient restClient = RestClient.builder().build();
 
-    public URI getAuthUri(String redirectUri) {
+    public URI getAuthUri() {
         String uri = String.format("%s?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
                 authUrl, this.clientId, "code", redirectUri, this.scope);
         return URI.create(uri);
     }
 
-    public String getAccessToken(String authCode, String redirectUri) {
+    public String getAccessToken(String authCode) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
 
         requestBody.add("grant_type", "authorization_code");

@@ -35,7 +35,8 @@ public class GaemeConfig {
             @Value("${oauth.kakao.token_url}") String tokenUrl,
             @Value("${oauth.kakao.info_url}") String infoUrl,
             @Value("${oauth.kakao.client_id}") String clientId,
-            @Value("${oauth.kakao.client_secret}") String clientSecret
+            @Value("${oauth.kakao.client_secret}") String clientSecret,
+            @Value("${oauth.kakao.redirect_uri}") String redirectUri
     ) {
         return new OauthClient(
                 clientId,
@@ -43,7 +44,8 @@ public class GaemeConfig {
                 null,
                 authUrl,
                 tokenUrl,
-                infoUrl
+                infoUrl,
+                redirectUri
         );
     }
 
@@ -53,7 +55,8 @@ public class GaemeConfig {
             @Value("${oauth.naver.token_url}") String tokenUrl,
             @Value("${oauth.naver.info_url}") String infoUrl,
             @Value("${oauth.naver.client_id}") String clientId,
-            @Value("${oauth.naver.client_secret}") String clientSecret
+            @Value("${oauth.naver.client_secret}") String clientSecret,
+            @Value("${oauth.naver.redirect_uri}") String redirectUri
     ) {
         return new OauthClient(
                 clientId,
@@ -61,7 +64,8 @@ public class GaemeConfig {
                 null,
                 authUrl,
                 tokenUrl,
-                infoUrl
+                infoUrl,
+                redirectUri
         );
     }
 
@@ -72,7 +76,8 @@ public class GaemeConfig {
             @Value("${oauth.google.info_url}") String infoUrl,
             @Value("${oauth.google.client_id}") String clientId,
             @Value("${oauth.google.client_secret}") String clientSecret,
-            @Value("${oauth.google.scope}") String scope
+            @Value("${oauth.google.scope}") String scope,
+            @Value("${oauth.google.redirect_uri}") String redirectUri
 
     ) {
         return new OauthClient(
@@ -81,7 +86,8 @@ public class GaemeConfig {
                 scope,
                 authUrl,
                 tokenUrl,
-                infoUrl
+                infoUrl,
+                redirectUri
         );
     }
 

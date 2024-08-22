@@ -17,19 +17,19 @@ public class OauthService {
 
     private final GoogleAuthUsecase googleAuthUsecase;
 
-    public String getAuthUri(String redirectUri, AuthCorp authCorp) {
+    public String getAuthUri(AuthCorp authCorp) {
         return switch (authCorp) {
-            case KAKAO -> kakaoAuthUsecase.getAuthUri(redirectUri);
-            case NAVER -> naverAuthUsecase.getAuthUri(redirectUri);
-            case GOOGLE -> googleAuthUsecase.getAuthUri(redirectUri);
+            case KAKAO -> kakaoAuthUsecase.getAuthUri();
+            case NAVER -> naverAuthUsecase.getAuthUri();
+            case GOOGLE -> googleAuthUsecase.getAuthUri();
         };
     }
 
-    public AuthResponseDto signInOrSignUp(String redirectUri, String authCode, AuthCorp authCorp) {
+    public AuthResponseDto signInOrSignUp(String authCode, AuthCorp authCorp) {
         return switch (authCorp) {
-            case KAKAO -> kakaoAuthUsecase.signInOrSignUp(redirectUri, authCode);
-            case NAVER -> naverAuthUsecase.signInOrSignUp(redirectUri, authCode);
-            case GOOGLE -> googleAuthUsecase.signInOrSignUp(redirectUri, authCode);
+            case KAKAO -> kakaoAuthUsecase.signInOrSignUp(authCode);
+            case NAVER -> naverAuthUsecase.signInOrSignUp(authCode);
+            case GOOGLE -> googleAuthUsecase.signInOrSignUp(authCode);
         };
     }
 

@@ -28,12 +28,16 @@ oauth:
     info_url: https://kapi.kakao.com/v2/user/me
     client_id: client_id
     client_secret: client_secret
+    redirect_uri: redirect_uri
+
   naver:
     auth_url: https://nid.naver.com/oauth2.0/authorize
     token_url: https://nid.naver.com/oauth2.0/token
     info_url: https://openapi.naver.com/v1/nid/me
     client_id: client_id
     client_secret: client_secret
+    redirect_uri: redirect_uri
+
   google:
     auth_url: https://accounts.google.com/o/oauth2/v2/auth
     token_url: https://oauth2.googleapis.com/token
@@ -41,5 +45,6 @@ oauth:
     client_id: client_id
     client_secret: client_secret
     scope: https://www.googleapis.com/auth/userinfo.profile
+    redirect_uri: redirect_uri
 
 jwt.secret: bigant42bigant42bigant42bigant42
