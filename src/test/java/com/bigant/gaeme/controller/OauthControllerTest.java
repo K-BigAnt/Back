@@ -53,8 +53,7 @@ public class OauthControllerTest {
         BDDMockito.given(oauthService.getAuthUri(AuthCorp.KAKAO))
                 .willReturn("http://localhost/oauth/authorize?client_id=kakao_id&response_type=code&redirect_uri=http://localhost/auth/callback");
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/auth/{auth_corp}", "kakao")
-                        .param("redirect_uri", "http://localhost/auth/callback"))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/auth/{auth_corp}", "kakao"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl(
             "http://localhost/oauth/authorize?client_id=kakao_id&response_type=code&redirect_uri=http://localhost/auth/callback"
@@ -69,9 +68,6 @@ public class OauthControllerTest {
                 preprocessResponse(prettyPrint()),
                 pathParameters(
                         parameterWithName("auth_corp").description("OAuth 플랫폼 (kakao, naver, google)")
-                ),
-                queryParameters(
-                        parameterWithName("redirect_uri").description("인가코드를 받을 리다이렉트 URI")
                 )
         );
     }
@@ -86,8 +82,7 @@ public class OauthControllerTest {
                 .willReturn(result);
 
         mockMvc.perform(RestDocumentationRequestBuilders.post("/v1/auth/{auth_corp}", "naver")
-                        .queryParam("code", "auth_code_blahblah")
-                        .queryParam("redirect_uri", "http://localhost/auth/callback"))
+                        .queryParam("code", "auth_code_blahblah"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(result)))
                 .andDo(getSignInOrSignUpPostResultHandler())
@@ -101,8 +96,7 @@ public class OauthControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(
-                        parameterWithName("code").description("인가 코드"),
-                        parameterWithName("redirect_uri").description("인가코드를 받은 리다이렉트 URI")
+                        parameterWithName("code").description("인가 코드")
                 ),
                 pathParameters(
                         parameterWithName("auth_corp").description("OAuth 플랫폼 (kakao, naver, google)")
