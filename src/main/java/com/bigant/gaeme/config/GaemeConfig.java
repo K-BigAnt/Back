@@ -1,15 +1,18 @@
 package com.bigant.gaeme.config;
 
 import com.bigant.gaeme.dao.OauthClient;
+import com.bigant.gaeme.modelmapper.KrStockToStockSearchDtoConverter;
 import com.bigant.gaeme.repository.KrStockRepository;
 import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.usecase.StockDataUsecase;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ui.ModelMap;
 
 @Configuration
 @RequiredArgsConstructor
@@ -89,6 +92,15 @@ public class GaemeConfig {
                 infoUrl,
                 redirectUri
         );
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+
+        modelMapper.addConverter(new KrStockToStockSearchDtoConverter());
+
+        return modelMapper;
     }
 
 }
