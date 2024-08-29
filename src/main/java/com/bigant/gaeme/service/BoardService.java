@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    private BoardTreePathRepository boardTreePathRepository;
+    private final BoardTreePathRepository boardTreePathRepository;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public BoardCreateResponseDto createBoard(Long requestId, BoardCreateRequestDto dto) {
