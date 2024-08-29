@@ -2,7 +2,7 @@ package com.bigant.gaeme.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
+import com.bigant.gaeme.dto.UsStockDto.UsStockItem;
 import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

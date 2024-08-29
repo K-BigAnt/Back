@@ -1,7 +1,7 @@
 package com.bigant.gaeme.dao;
 
-import com.bigant.gaeme.dao.dto.KrStockDto;
-import com.bigant.gaeme.dao.dto.KrStockResponseDto;
+import com.bigant.gaeme.dto.KrStockDto;
+import com.bigant.gaeme.dto.KrStockResponseDto;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;

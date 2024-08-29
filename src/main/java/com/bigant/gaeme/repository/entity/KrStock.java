@@ -1,6 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
-import com.bigant.gaeme.dao.dto.KrStockDto;
+import com.bigant.gaeme.dto.KrStockDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

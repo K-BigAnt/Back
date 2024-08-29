@@ -1,4 +1,4 @@
-package com.bigant.gaeme.dao.dto;
+package com.bigant.gaeme.dto;
 
 import com.bigant.gaeme.repository.entity.Stock;
 import com.bigant.gaeme.repository.enums.StockType;

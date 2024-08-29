@@ -1,6 +1,6 @@
 package com.bigant.gaeme.controller;
 
-import com.bigant.gaeme.dao.dto.UserDto;
+import com.bigant.gaeme.dto.UserDto;
 import com.bigant.gaeme.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;

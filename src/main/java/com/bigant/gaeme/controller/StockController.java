@@ -1,7 +1,7 @@
 package com.bigant.gaeme.controller;
 
-import com.bigant.gaeme.dao.dto.StockPriceResponseDto;
-import com.bigant.gaeme.dao.dto.StockSearchDto;
+import com.bigant.gaeme.dto.StockPriceResponseDto;
+import com.bigant.gaeme.dto.StockSearchDto;
 import com.bigant.gaeme.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

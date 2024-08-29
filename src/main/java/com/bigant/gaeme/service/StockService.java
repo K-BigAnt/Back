@@ -1,6 +1,6 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dao.dto.StockSearchDto;
+import com.bigant.gaeme.dto.StockSearchDto;
 import com.bigant.gaeme.repository.StockRepository;
 import com.bigant.gaeme.repository.entity.Stock;
 import java.util.List;

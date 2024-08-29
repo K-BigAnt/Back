@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigant.gaeme.config.InterceptorTestConfig;
-import com.bigant.gaeme.dao.dto.StockSearchDto;
+import com.bigant.gaeme.dto.StockSearchDto;
 import com.bigant.gaeme.repository.enums.StockType;
 import com.bigant.gaeme.service.StockService;
 import java.util.List;

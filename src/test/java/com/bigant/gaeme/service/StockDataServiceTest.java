@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bigant.gaeme.dao.KrStockDao;
 import com.bigant.gaeme.dao.UsStockDao;
-import com.bigant.gaeme.dao.dto.KrStockDto;
-import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
+import com.bigant.gaeme.dto.KrStockDto;
+import com.bigant.gaeme.dto.UsStockDto.UsStockItem;
 import com.bigant.gaeme.repository.KrStockRepository;
 import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;

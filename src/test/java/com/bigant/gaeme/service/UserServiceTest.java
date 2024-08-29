@@ -1,6 +1,6 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dao.dto.UserDto;
+import com.bigant.gaeme.dto.UserDto;
 import com.bigant.gaeme.repository.UserRepository;
 import com.bigant.gaeme.repository.entity.User;
 import org.junit.jupiter.api.Assertions;
