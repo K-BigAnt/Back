@@ -136,4 +136,35 @@ public class BoardServiceTest {
                 .build(), result);
     }
 
+    @Test
+    void 보드_삭제_성공() {
+        //given
+        User testUser = TestFixture.getTestUser();
+        userRepository.save(testUser);
+        Board testBoard = TestFixture.getTestBoard(testUser);
+        boardRepository.save(testBoard);
+
+        //when
+        BoardDto result = boardService.deleteBoard(testBoard.getId());
+
+        //then
+        Assertions.assertEquals(BoardDto.builder()
+                        .isDeleted(true)
+                        .user(UserDto.builder()
+                                .address(testUser.getAddress())
+                                .phoneNumber(testUser.getPhoneNumber())
+                                .profileImg(testUser.getProfileImg())
+                                .nickname(testUser.getNickname())
+                                .name(testUser.getName())
+                                .email(testUser.getEmail())
+                                .id(testUser.getId())
+                                .build())
+                        .content(testBoard.getContent())
+                        .createdAt(testBoard.getCreatedAt())
+                        .likeCnt(12L)
+                        .pictureUrls(List.of())
+                        .updatedAt(testBoard.getUpdatedAt())
+                .build(), result);
+    }
+
 }

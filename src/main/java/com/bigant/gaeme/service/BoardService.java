@@ -10,9 +10,11 @@ import com.bigant.gaeme.repository.entity.Board;
 import com.bigant.gaeme.repository.entity.BoardTreePath;
 import com.bigant.gaeme.repository.entity.User;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +62,14 @@ public class BoardService {
                 .build();
 
         return boardTreePathRepository.save(boardTreePath);
+    }
+
+    public BoardDto deleteBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow();
+
+        board.setDeleted(true);
+        board.setUpdatedAt(LocalDateTime.now());
+        return modelMapper.map(board, BoardDto.class);
     }
 
 }
