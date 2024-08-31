@@ -25,6 +25,7 @@ public class BoardToResponseDtoConverter extends AbstractConverter<Board, BoardD
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
                 .pictureUrls(List.of())
+                .isDeleted(board.isDeleted())
                 .build();
     }
 }

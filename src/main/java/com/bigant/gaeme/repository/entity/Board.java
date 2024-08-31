@@ -31,4 +31,6 @@ public class Board {
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    private boolean isDeleted;
+
 }
