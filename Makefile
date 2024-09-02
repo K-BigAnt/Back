@@ -17,6 +17,7 @@ $(NAME):
 	git submodule init
 	git submodule update
 	$(BUILD) build -x test
+	$(BUILD) asciidoctor
 	$(COMPOSE) up -d
 
 shell_db:
@@ -26,8 +27,7 @@ shell_server:
 	$(COMPOSE) exec server /bin/bash
 
 clean:
-	$(COMPOSE) down
-	docker rmi gaeme:0.0.0
+	$(COMPOSE) down --rmi local
 
 restdoc:
 	$(BUILD) asciidoctor
