@@ -12,8 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigant.gaeme.config.InterceptorTestConfig;
+import com.bigant.gaeme.dao.dto.AuthResponseDto;
 import com.bigant.gaeme.repository.enums.AuthCorp;
-import com.bigant.gaeme.service.AuthResponseDto;
 import com.bigant.gaeme.service.OauthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
