@@ -1,5 +1,6 @@
 package com.bigant.gaeme.service;
 
+import com.bigant.gaeme.dao.dto.AuthResponseDto;
 import com.bigant.gaeme.repository.enums.AuthCorp;
 import com.bigant.gaeme.usecase.GoogleAuthUsecase;
 import com.bigant.gaeme.usecase.KakaoAuthUsecase;

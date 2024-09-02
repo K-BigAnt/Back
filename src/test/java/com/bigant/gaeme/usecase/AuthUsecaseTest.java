@@ -4,9 +4,9 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.dao.OauthClient;
+import com.bigant.gaeme.dao.dto.AuthResponseDto;
 import com.bigant.gaeme.repository.UserRepository;
 import com.bigant.gaeme.repository.entity.User;
-import com.bigant.gaeme.service.AuthResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
