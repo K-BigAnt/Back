@@ -30,13 +30,22 @@ public class JwtBuilder {
     }
 
     public Long decryptJwt(String jwtToken) {
+        String token = removeBearer(jwtToken);
+
         try {
-            String id = Jwts.parser().verifyWith(key).build().parseSignedClaims(jwtToken).getPayload().getId();
+            String id = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getId();
 
             return Long.parseLong(id);
         } catch (RuntimeException exception) {
             return null;
         }
+    }
+
+    private String removeBearer(String token) {
+        if (token.length() <= 7) {
+            throw new IllegalArgumentException("Bearer token length must be at least 7");
+        }
+        return token.substring(7);
     }
 
 }
