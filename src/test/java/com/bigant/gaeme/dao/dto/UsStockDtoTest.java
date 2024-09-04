@@ -1,7 +1,8 @@
 package com.bigant.gaeme.dao.dto;
 
-import com.bigant.gaeme.dao.dto.UsStockDto.UsStockBody;
-import com.bigant.gaeme.dao.dto.UsStockDto.UsStockItem;
+import com.bigant.gaeme.dto.UsStockDto;
+import com.bigant.gaeme.dto.UsStockDto.UsStockBody;
+import com.bigant.gaeme.dto.UsStockDto.UsStockItem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

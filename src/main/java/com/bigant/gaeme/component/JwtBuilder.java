@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
 import javax.crypto.SecretKey;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,13 +31,22 @@ public class JwtBuilder {
     }
 
     public Long decryptJwt(String jwtToken) {
+        String token = removeBearer(jwtToken);
+
         try {
-            String id = Jwts.parser().verifyWith(key).build().parseSignedClaims(jwtToken).getPayload().getId();
+            String id = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getId();
 
             return Long.parseLong(id);
         } catch (RuntimeException exception) {
             return null;
         }
+    }
+
+    private String removeBearer(String token) {
+        if (StringUtils.length(token) <= 7) {
+            throw new IllegalArgumentException("Bearer token length must be at least 7");
+        }
+        return token.substring(7);
     }
 
 }

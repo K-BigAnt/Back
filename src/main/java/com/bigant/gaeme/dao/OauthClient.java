@@ -1,6 +1,6 @@
 package com.bigant.gaeme.dao;
 
-import com.bigant.gaeme.dao.dto.TokenResponseDto;
+import com.bigant.gaeme.dto.TokenResponseDto;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

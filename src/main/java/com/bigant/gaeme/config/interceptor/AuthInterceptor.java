@@ -39,16 +39,20 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (authorized.authRole() == AuthRole.MEMBER) {
             String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            if (token == null || token.length() < 7) {
-                throw new AuthenticationServiceException("토큰 형식 오류");
-            }
-
-            Long userId = jwtBuilder.decryptJwt(token.substring(7));
+            Long userId = getUserId(token);
 
             return userRepository.existsById(userId);
         }
 
         return true;
+    }
+
+    private Long getUserId(String token) {
+        try {
+            return jwtBuilder.decryptJwt(token);
+        } catch (Exception e) {
+            throw new AuthenticationServiceException(e.getMessage(), e);
+        }
     }
 
 }

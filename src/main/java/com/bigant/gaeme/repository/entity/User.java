@@ -30,4 +30,6 @@ public class User {
 
     private String oauthId;
 
+    private String profileImg;
+
 }

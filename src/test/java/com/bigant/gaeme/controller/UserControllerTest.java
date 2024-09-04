@@ -9,10 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bigant.gaeme.TestDescriptors;
 import com.bigant.gaeme.config.InterceptorTestConfig;
-import com.bigant.gaeme.dao.dto.UserDto;
+import com.bigant.gaeme.dto.UserDto;
 import com.bigant.gaeme.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -76,14 +76,7 @@ public class UserControllerTest {
         return document("user/patch",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
-                PayloadDocumentation.requestFields(
-                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 아이디"),
-                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름").optional(),
-                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임").optional(),
-                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일").optional(),
-                        fieldWithPath("phone_number").type(JsonFieldType.STRING).description("전화번호").optional(),
-                        fieldWithPath("address").type(JsonFieldType.STRING).description("주소").optional()
-                )
+                PayloadDocumentation.requestFields(TestDescriptors.getUserDescriptors())
         );
     }
 

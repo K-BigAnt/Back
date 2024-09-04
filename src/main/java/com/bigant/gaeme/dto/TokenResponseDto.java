@@ -1,4 +1,4 @@
-package com.bigant.gaeme.dao.dto;
+package com.bigant.gaeme.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

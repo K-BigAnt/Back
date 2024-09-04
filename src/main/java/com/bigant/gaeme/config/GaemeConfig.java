@@ -99,6 +99,7 @@ public class GaemeConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         modelMapper.addConverter(new KrStockToStockSearchDtoConverter());
+        modelMapper.addConverter(new KrStockToStockSearchDtoConverter());
 
         return modelMapper;
     }

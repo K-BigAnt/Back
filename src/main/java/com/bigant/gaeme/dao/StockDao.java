@@ -1,6 +1,6 @@
 package com.bigant.gaeme.dao;
 
-import com.bigant.gaeme.dao.dto.StockDto;
+import com.bigant.gaeme.dto.StockDto;
 import java.util.List;
 
 public interface StockDao<T extends StockDto> {
