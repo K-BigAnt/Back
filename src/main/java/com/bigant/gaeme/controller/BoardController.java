@@ -26,12 +26,12 @@ public class BoardController {
     public BoardCreateResponseDto create(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestPart List<MultipartFile> files,
-            @RequestParam String content,
-            @RequestParam Optional<Long> ancestorId) {
+            @RequestPart String content,
+            @RequestPart Optional<String> ancestorId) {
         return boardService.createBoard(jwtBuilder.decryptJwt(token), BoardCreateRequestDto.builder()
                         .imageFiles(files)
                         .content(content)
-                        .ancestorId(ancestorId)
+                        .ancestorId(ancestorId.map(Long::parseLong))
                 .build());
     }
 

@@ -1,0 +1,5 @@
+== Stock
+
+=== 게시글 생성
+operation::board/post[snippets="http-request,http-response,request-parts"]
+
