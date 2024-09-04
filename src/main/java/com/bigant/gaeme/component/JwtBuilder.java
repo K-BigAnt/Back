@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
 import javax.crypto.SecretKey;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,7 @@ public class JwtBuilder {
     }
 
     private String removeBearer(String token) {
-        if (token.length() <= 7) {
+        if (StringUtils.length(token) <= 7) {
             throw new IllegalArgumentException("Bearer token length must be at least 7");
         }
         return token.substring(7);
