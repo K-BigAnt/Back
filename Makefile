@@ -26,8 +26,7 @@ shell_server:
 	$(COMPOSE) exec server /bin/bash
 
 clean:
-	$(COMPOSE) down
-	docker rmi gaeme:0.0.0
+	$(COMPOSE) down --rmi local
 
 restdoc:
 	$(BUILD) asciidoctor
