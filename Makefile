@@ -17,7 +17,6 @@ $(NAME):
 	git submodule init
 	git submodule update
 	$(BUILD) build -x test
-	$(BUILD) asciidoctor
 	$(COMPOSE) up -d
 
 shell_db:
