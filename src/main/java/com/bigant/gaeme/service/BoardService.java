@@ -2,6 +2,7 @@ package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.dto.BoardCreateRequestDto;
 import com.bigant.gaeme.dto.BoardCreateResponseDto;
+import com.bigant.gaeme.dto.BoardDeleteRequestDto;
 import com.bigant.gaeme.dto.BoardDto;
 import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
@@ -64,8 +65,8 @@ public class BoardService {
         return boardTreePathRepository.save(boardTreePath);
     }
 
-    public BoardDto deleteBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow();
+    public BoardDto deleteBoard(BoardDeleteRequestDto dto) {
+        Board board = boardRepository.findById(dto.getBoardId()).orElseThrow();
 
         board.setDeleted(true);
         board.setUpdatedAt(LocalDateTime.now());

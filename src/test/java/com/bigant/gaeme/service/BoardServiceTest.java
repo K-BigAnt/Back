@@ -1,10 +1,7 @@
 package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.TestFixture;
-import com.bigant.gaeme.dto.BoardCreateRequestDto;
-import com.bigant.gaeme.dto.BoardCreateResponseDto;
-import com.bigant.gaeme.dto.BoardDto;
-import com.bigant.gaeme.dto.UserDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.modelmapper.BoardToResponseDtoConverter;
 import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
@@ -145,7 +142,9 @@ public class BoardServiceTest {
         boardRepository.save(testBoard);
 
         //when
-        BoardDto result = boardService.deleteBoard(testBoard.getId());
+        BoardDto result = boardService.deleteBoard(BoardDeleteRequestDto.builder()
+                .boardId(testBoard.getId())
+                .build());
 
         //then
         Assertions.assertEquals(BoardDto.builder()
