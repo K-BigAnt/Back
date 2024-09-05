@@ -41,8 +41,8 @@ public class OauthController {
         AuthResponseDto authResponseDto = oauthService.signInOrSignUp(code, authCorp);
         Cookie cookie = new Cookie("token", authResponseDto.getToken());
         cookie.setHttpOnly(true);
-        cookie.setMaxAge((int)Duration.ofDays(7L).getSeconds());
-
+        cookie.setMaxAge((int) Duration.ofDays(7L).getSeconds());
+        cookie.setSecure(true);
         response.addCookie(cookie);
         return authResponseDto;
     }
