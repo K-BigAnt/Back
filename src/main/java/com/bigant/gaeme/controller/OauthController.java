@@ -3,7 +3,9 @@ package com.bigant.gaeme.controller;
 import com.bigant.gaeme.dao.dto.AuthResponseDto;
 import com.bigant.gaeme.repository.enums.AuthCorp;
 import com.bigant.gaeme.service.OauthService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +34,17 @@ public class OauthController {
 
     @PostMapping("/{auth_corp}")
     public AuthResponseDto signInOrSignUp(
+            HttpServletResponse response,
             @PathVariable("auth_corp") AuthCorp authCorp,
             @RequestParam String code
     ) {
-        return oauthService.signInOrSignUp(code, authCorp);
+        AuthResponseDto authResponseDto = oauthService.signInOrSignUp(code, authCorp);
+        Cookie cookie = new Cookie("token", authResponseDto.getToken());
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge((int)Duration.ofDays(7L).getSeconds());
+
+        response.addCookie(cookie);
+        return authResponseDto;
     }
 
 }
