@@ -142,7 +142,7 @@ public class BoardServiceTest {
         boardRepository.save(testBoard);
 
         //when
-        BoardDto result = boardService.deleteBoard(BoardDeleteRequestDto.builder()
+        BoardDto result = boardService.deleteBoard(testUser.getId(), BoardDeleteRequestDto.builder()
                 .boardId(testBoard.getId())
                 .build());
 

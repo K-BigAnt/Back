@@ -3,17 +3,21 @@ package com.bigant.gaeme.controller;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bigant.gaeme.TestFixture;
 import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.config.InterceptorTestConfig;
 import com.bigant.gaeme.dto.BoardCreateResponseDto;
+import com.bigant.gaeme.dto.BoardDeleteRequestDto;
 import com.bigant.gaeme.dto.BoardDto;
 import com.bigant.gaeme.dto.UserDto;
+import com.bigant.gaeme.repository.entity.User;
 import com.bigant.gaeme.service.BoardService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,10 +30,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(BoardController.class)
@@ -47,6 +53,9 @@ public class BoardControllerTest {
 
     @MockBean
     private JwtBuilder jwtBuilder;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void createBoardTest() throws Exception {
@@ -115,6 +124,52 @@ public class BoardControllerTest {
                 requestParts(partWithName("files").description("첨부할 파일들"),
                         partWithName("content").description("게시글 내용"),
                         partWithName("ancestorId").description("부모 게시글 id"))
+        );
+    }
+
+    @Test
+    void boardDeleteTest() throws Exception {
+        //given
+        User testUser = TestFixture.getTestUser();
+        BoardDeleteRequestDto dto = BoardDeleteRequestDto.builder().boardId(1L).build();
+        BDDMockito.given(jwtBuilder.decryptJwt(BDDMockito.any())).willReturn(testUser.getId());
+        BDDMockito.given(boardService.deleteBoard(BDDMockito.any(), BDDMockito.any())).willReturn(BoardDto.builder()
+                        .isDeleted(true)
+                        .user(UserDto.builder()
+                                .address(testUser.getAddress())
+                                .phoneNumber(testUser.getPhoneNumber())
+                                .profileImg(testUser.getProfileImg())
+                                .nickname(testUser.getNickname())
+                                .name(testUser.getName())
+                                .email(testUser.getEmail())
+                                .id(1L)
+                                .build())
+                        .content("content")
+                        .createdAt(LocalDateTime.of(2024, 9, 1, 7, 14))
+                        .likeCnt(12L)
+                        .pictureUrls(List.of())
+                        .updatedAt(LocalDateTime.of(2024, 9, 5, 7, 14))
+                        .build()
+        );
+
+        //when
+        mvc.perform(RestDocumentationRequestBuilders.delete("/v1/board")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getBoardDeleteResultHandler());
+
+        //then
+        BDDMockito.then(boardService).should().deleteBoard(BDDMockito.any(), BDDMockito.any());
+    }
+
+    RestDocumentationResultHandler getBoardDeleteResultHandler() {
+        return document("board/delete",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("삭제할 게시글의 아이디"))
         );
     }
 

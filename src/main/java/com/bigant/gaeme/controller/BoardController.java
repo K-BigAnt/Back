@@ -42,7 +42,7 @@ public class BoardController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody BoardDeleteRequestDto dto
     ) {
-        return boardService.deleteBoard(dto);
+        return boardService.deleteBoard(jwtBuilder.decryptJwt(token), dto);
     }
 
 }

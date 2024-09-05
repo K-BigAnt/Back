@@ -65,8 +65,13 @@ public class BoardService {
         return boardTreePathRepository.save(boardTreePath);
     }
 
-    public BoardDto deleteBoard(BoardDeleteRequestDto dto) {
+    public BoardDto deleteBoard(Long requestId, BoardDeleteRequestDto dto) {
+        User user = userRepository.findById(requestId).orElseThrow();
         Board board = boardRepository.findById(dto.getBoardId()).orElseThrow();
+
+        if (board.getUser() != user) {
+            throw new IllegalArgumentException("요청을 보낸 유저가 해당 보드의 글쓴이가 아닙니다.");
+        }
 
         board.setDeleted(true);
         board.setUpdatedAt(LocalDateTime.now());
