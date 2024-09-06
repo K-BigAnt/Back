@@ -1,10 +1,7 @@
 package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.TestFixture;
-import com.bigant.gaeme.dto.BoardCreateRequestDto;
-import com.bigant.gaeme.dto.BoardCreateResponseDto;
-import com.bigant.gaeme.dto.BoardDto;
-import com.bigant.gaeme.dto.UserDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.modelmapper.BoardToResponseDtoConverter;
 import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
@@ -133,6 +130,39 @@ public class BoardServiceTest {
                         .createdAt(result.getDescendant().getCreatedAt())
                         .build()
                 )
+                .build(), result);
+    }
+
+    @Test
+    void 보드_삭제_성공() {
+        //given
+        User testUser = TestFixture.getTestUser();
+        userRepository.save(testUser);
+        Board testBoard = TestFixture.getTestBoard(testUser);
+        boardRepository.save(testBoard);
+
+        //when
+        BoardDto result = boardService.deleteBoard(testUser.getId(), BoardDeleteRequestDto.builder()
+                .boardId(testBoard.getId())
+                .build());
+
+        //then
+        Assertions.assertEquals(BoardDto.builder()
+                        .isDeleted(true)
+                        .user(UserDto.builder()
+                                .address(testUser.getAddress())
+                                .phoneNumber(testUser.getPhoneNumber())
+                                .profileImg(testUser.getProfileImg())
+                                .nickname(testUser.getNickname())
+                                .name(testUser.getName())
+                                .email(testUser.getEmail())
+                                .id(testUser.getId())
+                                .build())
+                        .content(testBoard.getContent())
+                        .createdAt(testBoard.getCreatedAt())
+                        .likeCnt(12L)
+                        .pictureUrls(List.of())
+                        .updatedAt(testBoard.getUpdatedAt())
                 .build(), result);
     }
 

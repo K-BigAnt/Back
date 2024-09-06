@@ -2,6 +2,7 @@ package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.dto.BoardCreateRequestDto;
 import com.bigant.gaeme.dto.BoardCreateResponseDto;
+import com.bigant.gaeme.dto.BoardDeleteRequestDto;
 import com.bigant.gaeme.dto.BoardDto;
 import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
@@ -10,9 +11,11 @@ import com.bigant.gaeme.repository.entity.Board;
 import com.bigant.gaeme.repository.entity.BoardTreePath;
 import com.bigant.gaeme.repository.entity.User;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +63,19 @@ public class BoardService {
                 .build();
 
         return boardTreePathRepository.save(boardTreePath);
+    }
+
+    public BoardDto deleteBoard(Long requestId, BoardDeleteRequestDto dto) {
+        User user = userRepository.findById(requestId).orElseThrow();
+        Board board = boardRepository.findById(dto.getBoardId()).orElseThrow();
+
+        if (board.getUser() != user) {
+            throw new IllegalArgumentException("요청을 보낸 유저가 해당 보드의 글쓴이가 아닙니다.");
+        }
+
+        board.setDeleted(true);
+        board.setUpdatedAt(LocalDateTime.now());
+        return modelMapper.map(board, BoardDto.class);
     }
 
 }

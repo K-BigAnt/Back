@@ -3,6 +3,8 @@ package com.bigant.gaeme.controller;
 import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.dto.BoardCreateRequestDto;
 import com.bigant.gaeme.dto.BoardCreateResponseDto;
+import com.bigant.gaeme.dto.BoardDeleteRequestDto;
+import com.bigant.gaeme.dto.BoardDto;
 import com.bigant.gaeme.service.BoardService;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +35,14 @@ public class BoardController {
                         .content(content)
                         .ancestorId(ancestorId.map(Long::parseLong))
                 .build());
+    }
+
+    @DeleteMapping
+    public BoardDto delete(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody BoardDeleteRequestDto dto
+    ) {
+        return boardService.deleteBoard(jwtBuilder.decryptJwt(token), dto);
     }
 
 }

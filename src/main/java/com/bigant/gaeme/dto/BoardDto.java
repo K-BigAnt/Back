@@ -25,4 +25,6 @@ public class BoardDto {
 
     private Long likeCnt;
 
+    private boolean isDeleted;
+
 }
