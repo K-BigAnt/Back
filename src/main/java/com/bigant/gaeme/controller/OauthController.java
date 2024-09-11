@@ -42,7 +42,7 @@ public class OauthController {
         Cookie cookie = new Cookie("token", authResponseDto.getToken());
         cookie.setHttpOnly(true);
         cookie.setMaxAge((int) Duration.ofDays(7L).getSeconds());
-//        cookie.setSecure(true); // https 에서만 쿠키 전송
+        //cookie.setSecure(true); // https 에서만 쿠키 전송
         response.addCookie(cookie);
         return authResponseDto;
     }
