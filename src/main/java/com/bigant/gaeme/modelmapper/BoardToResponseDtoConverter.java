@@ -20,6 +20,7 @@ public class BoardToResponseDtoConverter extends AbstractConverter<Board, BoardD
                         .profileImg(board.getUser().getProfileImg())
                         .build()
                 )
+                .id(board.getId())
                 .content(board.getContent())
                 .likeCnt(board.getLikeCnt())
                 .createdAt(board.getCreatedAt())
