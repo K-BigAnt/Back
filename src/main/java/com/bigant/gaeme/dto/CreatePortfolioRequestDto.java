@@ -1,4 +1,4 @@
-package com.bigant.gaeme.dao.dto;
+package com.bigant.gaeme.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

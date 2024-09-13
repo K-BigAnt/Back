@@ -1,6 +1,6 @@
 package com.bigant.gaeme.controller;
 
-import com.bigant.gaeme.dao.dto.CreatePortfolioRequestDto;
+import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
 import com.bigant.gaeme.service.PortfolioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dao.dto.CreatePortfolioRequestDto;
+import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
 import com.bigant.gaeme.repository.PortfolioRepository;
 import com.bigant.gaeme.repository.PortfolioStockRepository;
 import com.bigant.gaeme.repository.StockRepository;

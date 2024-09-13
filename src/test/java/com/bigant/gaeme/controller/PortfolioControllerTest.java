@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigant.gaeme.config.InterceptorTestConfig;
-import com.bigant.gaeme.dao.dto.CreatePortfolioRequestDto;
+import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
 import com.bigant.gaeme.service.PortfolioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
