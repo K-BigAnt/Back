@@ -38,6 +38,4 @@ public abstract class Stock {
     @Enumerated(value = EnumType.STRING)
     private StockType type;
 
-    public abstract StockDto toDto();
-
 }
