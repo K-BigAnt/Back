@@ -7,6 +7,7 @@ import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
 import com.bigant.gaeme.repository.UserRepository;
 import com.bigant.gaeme.repository.entity.Board;
+import com.bigant.gaeme.repository.entity.BoardTreePath;
 import com.bigant.gaeme.repository.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -238,6 +239,50 @@ public class BoardServiceTest {
                         .isDeleted(false)
                         .build()
                 ), result.getContent());
+    }
+
+    @Test
+    void 보드_댓글_조회_성공() {
+        //given
+        User testUser = TestFixture.getTestUser();
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
+        userRepository.save(testUser);
+        boardRepository.save(Board.builder()
+                .user(testUser)
+                .content("aaaaa")
+                .likeCnt(0L)
+                .build());
+        Board b = boardRepository.save(Board.builder()
+                .user(testUser)
+                .content("bbbbb")
+                .likeCnt(0L)
+                .build());
+        Board c = boardRepository.save(Board.builder()
+                .user(testUser)
+                .content("cccccc")
+                .likeCnt(0L)
+                .build());
+        boardTreePathRepository.save(BoardTreePath.builder()
+                        .ancestor(b)
+                        .descendant(c)
+                .build());
+
+        //when
+        Slice<BoardDto> result = boardService.readDefault(pageable, Optional.of(b.getId()));
+
+        //then
+        Assertions.assertEquals(List.of(
+                BoardDto.builder()
+                        .user(modelMapper.map(testUser, UserDto.class))
+                        .id(c.getId())
+                        .content("cccccc")
+                        .likeCnt(0L)
+                        .createdAt(c.getCreatedAt())
+                        .updatedAt(c.getUpdatedAt())
+                        .isDeleted(false)
+                        .pictureUrls(List.of())
+                        .build()
+        ), result.getContent());
     }
 
 }
