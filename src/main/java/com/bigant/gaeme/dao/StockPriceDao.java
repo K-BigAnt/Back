@@ -1,9 +1,11 @@
 package com.bigant.gaeme.dao;
 
+import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.dto.StockPriceResponseDto;
 import com.bigant.gaeme.dto.TokenResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,20 +28,28 @@ public class StockPriceDao {
 
     private final String appSecret;
 
-    private final ObjectMapper objectMapper;
+    private String token;
 
-    public StockPriceDao(@Value("${stock.data.app_key}") String appKey, @Value("${stock.data.app_secret}") String appSecret, ObjectMapper objectMapper) {
+    private LocalDateTime expiryDate;
+
+    public StockPriceDao(@Value("${stock.data.app_key}") String appKey, @Value("${stock.data.app_secret}") String appSecret) {
         this.appKey = appKey;
         this.appSecret = appSecret;
-        this.objectMapper = objectMapper;
     }
 
     public StockPriceResponseDto getKrStockPrice(LocalDate startDate, LocalDate endDate, String isinCode) {
+        if (token == null || expiryDate.isBefore(LocalDateTime.now())) {
+            TokenResponseDto result = getToken();
+
+            token = result.getAccessToken();
+            expiryDate = LocalDateTime.parse(result.getExpiredDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+
         ResponseEntity<StockPriceResponseDto> response = restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice")
                         .queryParams(getQueryParams(startDate, endDate, isinCode))
                 .build())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getToken())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
                 .header("appkey", appKey)
                 .header("appsecret", appSecret)
@@ -54,7 +64,7 @@ public class StockPriceDao {
         return response.getBody();
     }
 
-    private String getToken() {
+    private TokenResponseDto getToken() {
         Map<String, String> body = new HashMap<>();
         body.put("grant_type", "client_credentials");
         body.put("appkey", appKey);
@@ -70,7 +80,7 @@ public class StockPriceDao {
             throw new IllegalStateException("한국증권 토근 발급에 실패했습니다.");
         }
 
-        return response.getBody().getAccessToken();
+        return response.getBody();
     }
 
     private MultiValueMap<String, String> getQueryParams(LocalDate startDate, LocalDate endDate, String isinCode) {

@@ -1,7 +1,12 @@
 package com.bigant.gaeme.dto;
 
+import com.bigant.gaeme.repository.entity.Stock;
+import com.bigant.gaeme.repository.entity.StockPrice;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,5 +44,23 @@ public class StockPriceDto {
 
     @JsonAlias({"previousDayContrastTodayPrice", "prdy_vrss"})
     private String previousDayContrastTodayPrice;
+
+    @JsonIgnore
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    public StockPrice toEntity(Stock stock) {
+        return StockPrice.builder()
+                .businessDate(LocalDate.parse(getBusinessDate(), formatter))
+                .closePrice(Long.parseLong(getClosePrice()))
+                .openPrice(Long.parseLong(getOpenPrice()))
+                .highestPrice(Long.parseLong(getHighestPrice()))
+                .lowestPrice(Long.parseLong(getLowestPrice()))
+                .accumulatedVolume(Long.parseLong(getAccumulatedVolume()))
+                .accumulatedTradingAmount(Long.parseLong(getAccumulatedTradingAmount()))
+                .previousDayContrastTodaySign(getPreviousDayContrastTodaySign())
+                .previousDayContrastTodayPrice(Long.parseLong(getPreviousDayContrastTodayPrice()))
+                .stock(stock)
+                .build();
+    }
 
 }

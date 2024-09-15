@@ -1,9 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,5 +35,8 @@ public class StockPrice {
     private String previousDayContrastTodaySign;
 
     private Long previousDayContrastTodayPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Stock stock;
 
 }

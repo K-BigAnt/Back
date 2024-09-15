@@ -8,7 +8,9 @@ import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.repository.enums.StockType;
 import com.bigant.gaeme.usecase.StockDataUsecase;
+import com.bigant.gaeme.usecase.StockPriceDataUsecase;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ public class StockDataService {
 
     private final UsStockDao usStockDao;
 
+    private final StockPriceDataUsecase stockPriceDataUsecase;
+
     @Scheduled(cron = "* * 23 * * 3")
     @Transactional
     public void saveKrStockData() {
@@ -37,6 +41,12 @@ public class StockDataService {
     public void saveUsStockData() {
         usStockDataUsecase.saveStock(usStockDao.getStock().stream().map(dto -> dto.toEntity(StockType.STOCK)).toList(), StockType.STOCK);
         usStockDataUsecase.saveStock(usStockDao.getEtf().stream().map(dto -> dto.toEntity(StockType.ETF)).toList(), StockType.ETF);
+    }
+
+    @Scheduled(cron = "0 0 11 1 */1 *")
+    @Transactional
+    public void saveKrStockPrice() {
+        stockPriceDataUsecase.saveKrStockPrice(LocalDate.now().minusMonths(1), LocalDate.now());
     }
 
 }

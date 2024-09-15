@@ -12,6 +12,7 @@ import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.UsStock;
 import com.bigant.gaeme.repository.enums.StockType;
 import com.bigant.gaeme.usecase.StockDataUsecase;
+import com.bigant.gaeme.usecase.StockPriceDataUsecase;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,13 +48,16 @@ public class StockDataServiceTest {
 
     private StockDataUsecase<UsStock, UsStockRepository> usStockUsecase;
 
+    private StockPriceDataUsecase stockPriceDataUsecase;
+
     @BeforeEach
     void setup() {
         this.krStockDao = Mockito.mock(KrStockDao.class);
         this.usStockDao = Mockito.mock(UsStockDao.class);
+        this.stockPriceDataUsecase = Mockito.mock(StockPriceDataUsecase.class);
         this.krStockUsecase = new StockDataUsecase<>(krStockRepository);
         this.usStockUsecase = new StockDataUsecase<>(usStockRepository);
-        this.stockDataService = new StockDataService(krStockUsecase, usStockUsecase, krStockDao, usStockDao);
+        this.stockDataService = new StockDataService(krStockUsecase, usStockUsecase, krStockDao, usStockDao, stockPriceDataUsecase);
     }
 
     @Test
