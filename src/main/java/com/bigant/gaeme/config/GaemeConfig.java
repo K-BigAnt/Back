@@ -2,6 +2,7 @@ package com.bigant.gaeme.config;
 
 import com.bigant.gaeme.dao.OauthClient;
 import com.bigant.gaeme.modelmapper.KrStockToStockSearchDtoConverter;
+import com.bigant.gaeme.modelmapper.StockPriceDtoToStockPriceConverter;
 import com.bigant.gaeme.repository.KrStockRepository;
 import com.bigant.gaeme.repository.UsStockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
@@ -99,6 +100,7 @@ public class GaemeConfig {
 
         modelMapper.addConverter(new KrStockToStockSearchDtoConverter());
         modelMapper.addConverter(new KrStockToStockSearchDtoConverter());
+        modelMapper.addConverter(new StockPriceDtoToStockPriceConverter());
 
         return modelMapper;
     }
