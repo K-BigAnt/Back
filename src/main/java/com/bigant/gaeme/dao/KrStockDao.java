@@ -40,7 +40,13 @@ public class KrStockDao implements StockDao<KrStockDto> {
             throw new IllegalStateException("한국 주식 정보를 가져오는데 실패했습니다.");
         }
 
-        return response.getBody().response.body.items.item;
+        List<KrStockDto> results = response.getBody().response.body.items.item;
+
+        results.forEach(krStockDto ->
+                krStockDto.setSymbol(krStockDto.getSymbol().substring(1))
+        );
+
+        return results;
     }
 
     private URI getUri(String uriString) {
