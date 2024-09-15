@@ -13,25 +13,31 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StockPriceDto {
 
-    @JsonAlias({"date", "stck_bsop_date"})
-    private String date;
+    @JsonAlias({"businessDate", "stck_bsop_date"})
+    private String businessDate;
 
-    @JsonAlias({"close_price", "stck_clpr"})
+    @JsonAlias({"closePrice", "stck_clpr"})
     private String closePrice;
 
-    @JsonAlias({"open_price", "stck_oprc"})
+    @JsonAlias({"openPrice", "stck_oprc"})
     private String openPrice;
 
     @JsonAlias({"highest_price", "stck_hgpr"})
     private String highestPrice;
 
-    @JsonAlias({"lowest_price", "stck_lwpr"})
+    @JsonAlias({"lowestPrice", "stck_lwpr"})
     private String lowestPrice;
 
-    @JsonAlias({"accumulate_volume", "acml_vol"})
-    private String accumulateVolume;
+    @JsonAlias({"accumulatedVolume", "acml_vol"})
+    private String accumulatedVolume;
 
-    @JsonAlias({"accumilate_trading_amount", "acml_tr_pbmn"})
-    private String accumulateTradingAmount;
+    @JsonAlias({"accumulatedTradingAmount", "acml_tr_pbmn"})
+    private String accumulatedTradingAmount;
+
+    @JsonAlias({"previousDayContrastTodaySign", "prdy_vrss_sign"})
+    private String previousDayContrastTodaySign;
+
+    @JsonAlias({"previousDayContrastTodayPrice", "prdy_vrss"})
+    private String previousDayContrastTodayPrice;
 
 }
