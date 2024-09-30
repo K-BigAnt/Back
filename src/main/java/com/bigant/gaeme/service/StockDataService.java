@@ -45,8 +45,8 @@ public class StockDataService {
 
     @Scheduled(cron = "0 0 11 1 */1 *")
     @Transactional
-    public void saveKrStockPrice() {
-        stockPriceDataUsecase.saveKrStockPrice(LocalDate.now().minusMonths(1), LocalDate.now());
+    public void saveStockPrice() {
+        stockPriceDataUsecase.saveStockPrice(LocalDate.now().minusYears(1), LocalDate.now());
     }
 
 }
