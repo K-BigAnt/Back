@@ -4,10 +4,13 @@ import com.bigant.gaeme.dao.StockPriceDao;
 import com.bigant.gaeme.dto.StockPriceDto;
 import com.bigant.gaeme.repository.StockPriceRepository;
 import com.bigant.gaeme.repository.StockRepository;
+import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.Stock;
 import com.bigant.gaeme.repository.entity.StockPrice;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +24,14 @@ public class StockPriceDataUsecase {
 
     private final StockPriceRepository stockPriceRepository;
 
-    public void saveKrStockPrice(LocalDate startDate, LocalDate endDate) {
+    public void saveStockPrice(LocalDate startDate, LocalDate endDate) {
         List<Stock> stocks = stockRepository.findAllByIsDelisting(false);
 
         for (Stock stock : stocks) {
             try {
+                if (stock instanceof KrStock) continue;
                 saveStockPrice(startDate, endDate, stock);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -34,13 +39,25 @@ public class StockPriceDataUsecase {
     }
 
     private void saveStockPrice(LocalDate startDate, LocalDate endDate, Stock stock) throws InterruptedException {
-        List<StockPriceDto> results = stockPriceDao.getKrStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
+        List<StockPriceDto> results = getStockPrices(startDate, endDate, stock);
+        if (results == null || results.isEmpty()) {
+            return ;
+        }
         List<StockPrice> prices = results.stream().filter(stockPriceDto -> stockPriceDto.getBusinessDate() != null)
                 .map(stockPriceDto -> stockPriceDto.toEntity(stock))
                 .toList();
 
+
         stockPriceRepository.saveAll(prices);
-        Thread.sleep(300);
+        System.out.println(LocalDateTime.now());
+    }
+
+    private List<StockPriceDto> getStockPrices(LocalDate startDate, LocalDate endDate, Stock stock) {
+        if (stock instanceof KrStock) {
+            return List.of();
+//            return stockPriceDao.getKrStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
+        }
+        return stockPriceDao.getUsStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
     }
 
 }

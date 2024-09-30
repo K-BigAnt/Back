@@ -13,10 +13,15 @@ public class StockDataUtilsTest {
     private StockDataService stockDataService;
 
     @Test
-//    @Disabled
+    @Disabled
     void insertStockDateInDatabase() {
         stockDataService.saveKrStockData();
-//        stockDataService.saveUsStockData();
+        stockDataService.saveUsStockData();
+    }
+
+    @Test
+    void getPrice() {
+        stockDataService.saveStockPrice();
     }
 
 }
