@@ -27,13 +27,4 @@ public class KrStock extends Stock {
 
     private String isinCode;
 
-    @Override
-    public KrStockDto toDto() {
-        return KrStockDto.builder()
-                .name(this.getName())
-                .symbol(this.getSymbol())
-                .isinCode(this.isinCode)
-                .build();
-    }
-
 }
