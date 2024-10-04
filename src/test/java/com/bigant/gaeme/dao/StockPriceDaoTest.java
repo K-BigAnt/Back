@@ -23,7 +23,7 @@ public class StockPriceDaoTest {
     @Test
     @Disabled
     void getKrStockPriceTest() {
-        StockPriceResponseDto dto = stockPriceDao.getKrStockPrice(LocalDate.of(2022, 7,1),
+        StockPriceResponseDto dto = stockPriceDao.getKrStockPrice(LocalDate.of(2022, 7, 1),
                 LocalDate.of(2024, 7, 1), "A000050");
 
         System.out.println(dto);
@@ -35,7 +35,7 @@ public class StockPriceDaoTest {
         List<Stock> stocks = stockRepository.findAllByIsDelisting(false).stream().filter(stock -> stock instanceof UsStock).toList();
 
         stocks.forEach(stock -> {
-            StockPriceResponseDto dto = stockPriceDao.getUsStockPrice(LocalDate.of(2022, 7,1),
+            StockPriceResponseDto dto = stockPriceDao.getUsStockPrice(LocalDate.of(2022, 7, 1),
                     LocalDate.of(2024, 7, 1), stock.getSymbol());
 
             System.out.println(dto);

@@ -29,7 +29,9 @@ public class StockPriceDataUsecase {
 
         for (Stock stock : stocks) {
             try {
-                if (stock instanceof KrStock) continue;
+                if (stock instanceof KrStock) {
+                    continue;
+                }
                 saveStockPrice(startDate, endDate, stock);
                 Thread.sleep(300);
             } catch (InterruptedException e) {
@@ -41,7 +43,7 @@ public class StockPriceDataUsecase {
     private void saveStockPrice(LocalDate startDate, LocalDate endDate, Stock stock) throws InterruptedException {
         List<StockPriceDto> results = getStockPrices(startDate, endDate, stock);
         if (results == null || results.isEmpty()) {
-            return ;
+            return;
         }
         List<StockPrice> prices = results.stream().filter(stockPriceDto -> stockPriceDto.getBusinessDate() != null)
                 .map(stockPriceDto -> stockPriceDto.toEntity(stock))
@@ -54,8 +56,7 @@ public class StockPriceDataUsecase {
 
     private List<StockPriceDto> getStockPrices(LocalDate startDate, LocalDate endDate, Stock stock) {
         if (stock instanceof KrStock) {
-            return List.of();
-//            return stockPriceDao.getKrStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
+            return stockPriceDao.getKrStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
         }
         return stockPriceDao.getUsStockPrice(startDate, endDate, stock.getSymbol()).getPrices();
     }
