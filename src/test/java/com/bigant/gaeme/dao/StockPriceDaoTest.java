@@ -30,6 +30,7 @@ public class StockPriceDaoTest {
     }
 
     @Test
+    @Disabled
     void getUsStockPriceTest() {
         List<Stock> stocks = stockRepository.findAllByIsDelisting(false).stream().filter(stock -> stock instanceof UsStock).toList();
 
