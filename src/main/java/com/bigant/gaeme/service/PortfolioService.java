@@ -1,12 +1,16 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.repository.PortfolioRepository;
 import com.bigant.gaeme.repository.PortfolioStockRepository;
+import com.bigant.gaeme.repository.StockPriceRepository;
 import com.bigant.gaeme.repository.StockRepository;
 import com.bigant.gaeme.repository.entity.Portfolio;
 import com.bigant.gaeme.repository.entity.PortfolioStock;
+import com.bigant.gaeme.repository.entity.Stock;
+import com.bigant.gaeme.repository.entity.StockPrice;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,6 +26,8 @@ public class PortfolioService {
     private final StockRepository stockRepository;
 
     private final PortfolioStockRepository portfolioStockRepository;
+
+    private final StockPriceRepository stockPriceRepository;
 
     @Transactional
     public List<Long> createPortfolio(List<CreatePortfolioRequestDto> dtos) {
@@ -47,4 +53,55 @@ public class PortfolioService {
         return portfolios.stream().map(Portfolio::getId).toList();
     }
 
+    public BacktestResponseDto backtest(BacktestRequestDto dto) {
+        List<String> symbols = dto.getPortfolio().getStocks().stream().map(PortfolioDto.PortfolioStockDto::getSymbol).toList();
+        List<Stock> stocks = stockRepository.findAllBySymbolIn(symbols);
+
+        Map<String, List<StockPrice>> pricesByStock = stocks.stream().collect(
+                Collectors.toMap(Stock::getSymbol, stockPriceRepository::findAllByStock));
+
+        List<BacktestDto> backtests = new ArrayList<>();
+
+        for (PortfolioDto.PortfolioStockDto stock : dto.getPortfolio().getStocks()) {
+            List<BacktestDto.BacktestPriceDto> results = calculateBacktest(stock, pricesByStock.get(stock.getSymbol()), dto.getInitialAmount());
+            backtests.add(BacktestDto.builder()
+                    .stock(stock)
+                    .earns(results)
+                    .build());
+        }
+
+        return BacktestResponseDto.builder()
+                .result(backtests)
+                .build();
+    }
+
+    private List<BacktestDto.BacktestPriceDto> calculateBacktest(PortfolioDto.PortfolioStockDto stockDto, List<StockPrice> prices, Long initialAmount) {
+        Long partialInitialAmount = (long) (initialAmount * (stockDto.getRate() * 0.01));
+        List<Double> earnRates = new ArrayList<>(List.of(0.0));
+
+        for (int i = 1; i < prices.size(); i++) {
+            earnRates.add(i, (double) prices.get(i - 1).getClosePrice() / prices.get(i).getClosePrice());
+        }
+
+        System.out.println("earnRates: " + earnRates);
+
+        List<Long> earns = new ArrayList<>();
+        for (int i = 0; i < earnRates.size(); i++) {
+            if (i == 0) {
+                earns.add(partialInitialAmount);
+                continue ;
+            }
+            Long earn = (long) (earns.get(i - 1) * earnRates.get(i));
+            earns.add(earn);
+        }
+
+        List<BacktestDto.BacktestPriceDto> results = new ArrayList<>();
+        for (int i = 0; i < prices.size(); i++) {
+            results.add(BacktestDto.BacktestPriceDto.builder()
+                    .date(prices.get(i).getBusinessDate())
+                    .amount(earns.get(i))
+                    .build());
+        }
+        return results;
+    }
 }

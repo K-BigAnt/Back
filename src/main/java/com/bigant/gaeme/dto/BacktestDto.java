@@ -13,8 +13,21 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BacktestDto {
 
-    private List<LocalDate> dates;
+    PortfolioDto.PortfolioStockDto stock;
 
-    private List<Long> amounts;
+    List<BacktestPriceDto> earns;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class BacktestPriceDto {
+
+        private LocalDate date;
+
+
+        private Long amount;
+    }
+
 
 }
