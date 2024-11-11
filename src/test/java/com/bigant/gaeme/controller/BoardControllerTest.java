@@ -1,6 +1,7 @@
 package com.bigant.gaeme.controller;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -23,12 +24,17 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -41,6 +47,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(BoardController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs(uriPort = 80)
+@AutoConfigureDataJpa
 @ExtendWith(RestDocumentationExtension.class)
 @Import(InterceptorTestConfig.class)
 public class BoardControllerTest {
@@ -56,6 +63,8 @@ public class BoardControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Test
     void createBoardTest() throws Exception {
@@ -170,6 +179,50 @@ public class BoardControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("삭제할 게시글의 아이디"))
+        );
+    }
+
+    @Test
+    void boardReadTest() throws Exception {
+        //given
+        User testUser = TestFixture.getTestUser();
+        BDDMockito.given(boardService.readDefault(BDDMockito.any(), BDDMockito.any())).willReturn(
+                new SliceImpl<>(
+                        List.of(
+                                BoardDto.builder()
+                                        .user(modelMapper.map(testUser, UserDto.class))
+                                        .id(2L)
+                                        .content("cccccc")
+                                        .likeCnt(0L)
+                                        .createdAt(LocalDateTime.now())
+                                        .updatedAt(LocalDateTime.now())
+                                        .isDeleted(false)
+                                        .pictureUrls(List.of())
+                                        .build()
+                        ),
+                        PageRequest.of(1, 10, Sort.Direction.DESC, "createdAt"),
+                        false
+                )
+        );
+
+        //when
+        mvc.perform(get("/v1/board")
+                .param("pageNum", "1")
+                .param("ancestorId", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getBoardGetResultHandler());
+
+        //then
+        BDDMockito.then(boardService).should().readDefault(BDDMockito.any(), BDDMockito.any());
+    }
+
+    private RestDocumentationResultHandler getBoardGetResultHandler() {
+        return document("board/get",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                queryParameters(parameterWithName("pageNum").description("조회할 페이지 번호"),
+                        parameterWithName("ancestorId").description("댓글 조회시 부모 보드 아이디"))
         );
     }
 

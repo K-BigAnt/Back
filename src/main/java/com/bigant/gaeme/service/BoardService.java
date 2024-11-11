@@ -1,9 +1,6 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dto.BoardCreateRequestDto;
-import com.bigant.gaeme.dto.BoardCreateResponseDto;
-import com.bigant.gaeme.dto.BoardDeleteRequestDto;
-import com.bigant.gaeme.dto.BoardDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.repository.BoardRepository;
 import com.bigant.gaeme.repository.BoardTreePathRepository;
 import com.bigant.gaeme.repository.UserRepository;
@@ -12,8 +9,13 @@ import com.bigant.gaeme.repository.entity.BoardTreePath;
 import com.bigant.gaeme.repository.entity.User;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 
 
@@ -78,4 +80,25 @@ public class BoardService {
         return modelMapper.map(board, BoardDto.class);
     }
 
+    public Slice<BoardDto> readDefault(Pageable pageable, Optional<Long> ancestorId) {
+        if (ancestorId.isPresent()) {
+            return readDescendant(pageable, ancestorId.get());
+        }
+        return recentBoard(pageable);
+    }
+
+    private Slice<BoardDto> readDescendant(Pageable pageable, Long ancestorId) {
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        Slice<BoardTreePath> boardTreePaths = boardTreePathRepository.findAllByAncestor_Id(ancestorId, newPageable);
+
+        return new SliceImpl<>(boardTreePaths.map(boardTreePath -> modelMapper.map(boardTreePath.getDescendant(), BoardDto.class)).toList(),
+                newPageable,
+                boardTreePaths.hasNext());
+    }
+
+    private Slice<BoardDto> recentBoard(Pageable pageable) {
+        Slice<Board> boards = boardRepository.findAllBy(pageable);
+
+        return new SliceImpl<>(boards.stream().map(board -> modelMapper.map(board, BoardDto.class)).toList(), pageable, boards.hasNext());
+    }
 }

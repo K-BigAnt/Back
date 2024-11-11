@@ -15,6 +15,8 @@ public class BoardDto {
 
     private UserDto user;
 
+    private Long id;
+
     private String content;
 
     private List<String> pictureUrls;

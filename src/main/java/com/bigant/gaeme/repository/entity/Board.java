@@ -6,12 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
 
     @Id
@@ -27,8 +31,10 @@ public class Board {
 
     private Long likeCnt;
 
+    @CreatedDate
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @LastModifiedDate
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     private boolean isDeleted;
