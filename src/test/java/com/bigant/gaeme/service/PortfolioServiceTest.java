@@ -3,6 +3,7 @@ package com.bigant.gaeme.service;
 import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
 import com.bigant.gaeme.repository.PortfolioRepository;
 import com.bigant.gaeme.repository.PortfolioStockRepository;
+import com.bigant.gaeme.repository.StockPriceRepository;
 import com.bigant.gaeme.repository.StockRepository;
 import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.Portfolio;
@@ -30,12 +31,13 @@ public class PortfolioServiceTest {
     public PortfolioServiceTest(
             PortfolioRepository portfolioRepository,
             StockRepository stockRepository,
-            PortfolioStockRepository portfolioStockRepository
+            PortfolioStockRepository portfolioStockRepository,
+            StockPriceRepository stockPriceRepository
     ) {
         this.portfolioRepository = portfolioRepository;
         this.stockRepository = stockRepository;
         this.portfolioStockRepository = portfolioStockRepository;
-        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository);
+        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository);
     }
 
     @Test
