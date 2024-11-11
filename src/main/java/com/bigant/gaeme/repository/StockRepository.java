@@ -2,6 +2,7 @@ package com.bigant.gaeme.repository;
 
 import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.Stock;
+import com.bigant.gaeme.repository.enums.StockType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,7 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock> searchByNameOrSymbol(String query);
 
     Optional<Stock> findBySymbol(String symbol);
+
+    List<Stock> findAllByIsDelisting(boolean isDelisting);
 
 }

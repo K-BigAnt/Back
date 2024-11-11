@@ -19,4 +19,10 @@ public class StockDataUtilsTest {
         stockDataService.saveUsStockData();
     }
 
+    @Test
+    @Disabled
+    void getPrice() {
+        stockDataService.saveStockPrice();
+    }
+
 }

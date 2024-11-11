@@ -19,7 +19,9 @@ spring:
 
 stock:
   data:
-    kr.api_key: apikey
+    app_key: PSmJnkmCNk30MTlYs7pbD5o07ZwJWFdXDakW
+    app_secret: tsPPqblHfG5qkxGjoKLHnVwtbpASV4Njja+agghMTj4ejj/Tr3CbHs5FNZ9l0NOvYHhLfnql4GTdGvU7rgTf89BDl4eJzJfu1iyiq8mdDGNvoXDRLqtS753WVJNMAqnEB6ZHM4HrJYhxEbr48JjsPNbOtDJEVjAYJeJ1Y3WGZnYkSjnnUsg=
+    kr.api_key: Y1Lrbov%2BCon9GMbxFvi3Aav4JOhUk66Oigh3KPRqvkJqfr%2F5b0x99Oq4tVN0Qx6LPOzf86IgWdlpsiySiE%2FXWQ%3D%3D
 
 oauth:
   kakao:

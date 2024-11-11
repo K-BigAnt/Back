@@ -63,7 +63,7 @@ public class KrStockDao implements StockDao<KrStockDto> {
     private String getCurrentDateString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-        return LocalDate.now().minusDays(1).format(formatter);
+        return LocalDate.now().minusDays(4).format(formatter);
     }
 
     @Override
