@@ -8,9 +8,7 @@ import com.bigant.gaeme.repository.entity.KrStock;
 import com.bigant.gaeme.repository.entity.Stock;
 import com.bigant.gaeme.repository.entity.StockPrice;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +27,6 @@ public class StockPriceDataUsecase {
 
         for (Stock stock : stocks) {
             try {
-                if (stock instanceof KrStock) {
-                    continue;
-                }
                 saveStockPrice(startDate, endDate, stock);
                 Thread.sleep(300);
             } catch (InterruptedException e) {
@@ -51,7 +46,6 @@ public class StockPriceDataUsecase {
 
 
         stockPriceRepository.saveAll(prices);
-        System.out.println(LocalDateTime.now());
     }
 
     private List<StockPriceDto> getStockPrices(LocalDate startDate, LocalDate endDate, Stock stock) {
