@@ -1,4 +1,7 @@
-== Stock
+== Portfolio
 
 === 포트폴리오 생성
 operation::portfolio/post[snippets="http-request,http-response,request-fields"]
+
+=== 백테스트 조회
+operation::portfolio/get[snippets="http-request,http-response,request-fields"]
