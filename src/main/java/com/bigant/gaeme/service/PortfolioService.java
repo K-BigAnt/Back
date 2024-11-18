@@ -75,7 +75,9 @@ public class PortfolioService {
                 .build();
     }
 
-    private List<BacktestDto.BacktestPriceDto> calculateBacktest(PortfolioDto.PortfolioStockDto stockDto, List<StockPrice> prices, Long initialAmount) {
+    private List<BacktestDto.BacktestPriceDto> calculateBacktest(
+            PortfolioDto.PortfolioStockDto stockDto, List<StockPrice> prices, Long initialAmount
+    ) {
         Long partialInitialAmount = (long) (initialAmount * (stockDto.getRate() * 0.01));
         List<Double> earnRates = new ArrayList<>(List.of(0.0));
 
@@ -89,7 +91,7 @@ public class PortfolioService {
         for (int i = 0; i < earnRates.size(); i++) {
             if (i == 0) {
                 earns.add(partialInitialAmount);
-                continue ;
+                continue;
             }
             Long earn = (long) (earns.get(i - 1) * earnRates.get(i));
             earns.add(earn);
