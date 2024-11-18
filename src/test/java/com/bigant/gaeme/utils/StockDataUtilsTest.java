@@ -25,10 +25,4 @@ public class StockDataUtilsTest {
         stockDataService.saveStockPrice();
     }
 
-    @Test
-    @Disabled
-    void getPrice() {
-        stockDataService.saveStockPrice();
-    }
-
 }
