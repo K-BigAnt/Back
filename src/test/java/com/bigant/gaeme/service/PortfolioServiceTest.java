@@ -1,13 +1,13 @@
 package com.bigant.gaeme.service;
 
-import com.bigant.gaeme.dto.CreatePortfolioRequestDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.repository.PortfolioRepository;
 import com.bigant.gaeme.repository.PortfolioStockRepository;
 import com.bigant.gaeme.repository.StockPriceRepository;
 import com.bigant.gaeme.repository.StockRepository;
-import com.bigant.gaeme.repository.entity.KrStock;
-import com.bigant.gaeme.repository.entity.Portfolio;
-import com.bigant.gaeme.repository.entity.UsStock;
+import com.bigant.gaeme.repository.entity.*;
+import com.bigant.gaeme.repository.enums.StockType;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,6 +27,8 @@ public class PortfolioServiceTest {
 
     private final PortfolioService portfolioService;
 
+    private final StockPriceRepository stockPriceRepository;
+
     @Autowired
     public PortfolioServiceTest(
             PortfolioRepository portfolioRepository,
@@ -37,6 +39,7 @@ public class PortfolioServiceTest {
         this.portfolioRepository = portfolioRepository;
         this.stockRepository = stockRepository;
         this.portfolioStockRepository = portfolioStockRepository;
+        this.stockPriceRepository = stockPriceRepository;
         this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository);
     }
 
@@ -80,6 +83,87 @@ public class PortfolioServiceTest {
 
         //then
         Assertions.assertEquals("port1", result.getName());
+    }
+
+    @Test
+    void 백테스트_성공() {
+        //given
+        BacktestRequestDto request = BacktestRequestDto.builder()
+                .startDate(LocalDate.of(2023, 10, 1))
+                .endDate(LocalDate.of(2024, 11, 1))
+                .portfolio(PortfolioDto.builder()
+                        .name("test")
+                        .stocks(List.of(
+                                PortfolioDto.PortfolioStockDto.builder()
+                                        .symbol("APPL")
+                                        .rate(100)
+                                        .build()
+                        ))
+                        .build())
+                .initialAmount(10000L)
+                .build();
+
+        Stock apple = UsStock.builder()
+                .symbol("APPL")
+                .isDelisting(false)
+                .name("APPLE")
+                .country("USA")
+                .type(StockType.STOCK)
+                .build();
+
+        List<StockPrice> prices = List.of(
+                StockPrice.builder()
+                        .stock(apple)
+                        .businessDate(LocalDate.of(2023, 11, 30))
+                        .closePrice(1000L)
+                        .build(),
+                StockPrice.builder()
+                        .stock(apple)
+                        .businessDate(LocalDate.of(2023, 12, 31))
+                        .closePrice(1200L)
+                        .build(),
+                StockPrice.builder()
+                        .stock(apple)
+                        .businessDate(LocalDate.of(2024, 1, 31))
+                        .closePrice(1400L)
+                        .build()
+        );
+
+        stockRepository.save(apple);
+        stockPriceRepository.saveAll(prices);
+
+        //when
+        BacktestResponseDto result = portfolioService.backtest(request);
+
+        //then
+        Assertions.assertEquals(
+                BacktestResponseDto.builder()
+                        .result(List.of(
+                                BacktestDto.builder()
+                                        .stock(PortfolioDto.PortfolioStockDto.builder()
+                                                .symbol("APPL")
+                                                .rate(100)
+                                                .build())
+                                        .earns(
+                                                List.of(
+                                                        BacktestDto.BacktestPriceDto.builder()
+                                                                .date(LocalDate.of(2023, 11, 30))
+                                                                .amount(10000L)
+                                                                .build(),
+                                                        BacktestDto.BacktestPriceDto.builder()
+                                                                .date(LocalDate.of(2023, 12, 31))
+                                                                .amount(12000L)
+                                                                .build(),
+                                                        BacktestDto.BacktestPriceDto.builder()
+                                                                .date(LocalDate.of(2024, 1, 31))
+                                                                .amount(14000L)
+                                                                .build()
+                                                )
+                                        )
+                                        .build()
+                        ))
+                        .build(), result
+        );
     }
 
 }

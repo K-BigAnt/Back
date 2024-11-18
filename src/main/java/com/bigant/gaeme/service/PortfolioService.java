@@ -82,7 +82,7 @@ public class PortfolioService {
         List<Double> earnRates = new ArrayList<>(List.of(0.0));
 
         for (int i = 1; i < prices.size(); i++) {
-            earnRates.add(i, (double) prices.get(i - 1).getClosePrice() / prices.get(i).getClosePrice());
+            earnRates.add((double) prices.get(i).getClosePrice() / prices.get(i - 1).getClosePrice());
         }
 
         System.out.println("earnRates: " + earnRates);
