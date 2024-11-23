@@ -7,18 +7,17 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bigant.gaeme.TestFixture;
 import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.config.InterceptorTestConfig;
-import com.bigant.gaeme.dto.BoardCreateResponseDto;
-import com.bigant.gaeme.dto.BoardDeleteRequestDto;
-import com.bigant.gaeme.dto.BoardDto;
-import com.bigant.gaeme.dto.UserDto;
+import com.bigant.gaeme.dto.*;
 import com.bigant.gaeme.repository.entity.User;
 import com.bigant.gaeme.service.BoardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -223,6 +222,55 @@ public class BoardControllerTest {
                 preprocessResponse(prettyPrint()),
                 queryParameters(parameterWithName("pageNum").description("조회할 페이지 번호"),
                         parameterWithName("ancestorId").description("댓글 조회시 부모 보드 아이디"))
+        );
+    }
+
+    @Test
+    void updateBoardTest() throws Exception {
+        //given
+        User user = TestFixture.getTestUser();
+        user.setId(1L);
+        BoardUpdateRequestDto request = BoardUpdateRequestDto.builder()
+                .id(user.getId())
+                .likeCnt(100L)
+                .content("update test")
+                .build();
+        BDDMockito.given(boardService.update(BDDMockito.any(), BDDMockito.any())).willReturn(
+                BoardDto.builder()
+                        .id(1L)
+                        .user(modelMapper.map(user, UserDto.class))
+                        .updatedAt(LocalDateTime.now())
+                        .createdAt(LocalDateTime.now())
+                        .isDeleted(false)
+                        .pictureUrls(List.of())
+                        .content("update test")
+                        .likeCnt(100L)
+                        .build()
+        );
+
+        //when
+        mvc.perform(RestDocumentationRequestBuilders.patch("/v1/board")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(StandardCharsets.UTF_8)
+                .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getBoardPatchResultHandler());
+
+        //then
+        BDDMockito.then(boardService).should().update(BDDMockito.any(), BDDMockito.any());
+    }
+
+    RestDocumentationResultHandler getBoardPatchResultHandler() {
+        return document("board/patch",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("게시글 아이디"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
+                        fieldWithPath("likeCnt").type(JsonFieldType.NUMBER).description("게시글 좋아요 수")
+                )
         );
     }
 
