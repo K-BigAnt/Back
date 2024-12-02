@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -28,6 +29,8 @@ public class PortfolioServiceTest {
 
     private final UserRepository userRepository;
 
+    private final ModelMapper modelMapper;
+
     @Autowired
     public PortfolioServiceTest(
             PortfolioRepository portfolioRepository,
@@ -41,7 +44,8 @@ public class PortfolioServiceTest {
         this.portfolioStockRepository = portfolioStockRepository;
         this.stockPriceRepository = stockPriceRepository;
         this.userRepository = userRepository;
-        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository, userRepository);
+        this.modelMapper = new ModelMapper();
+        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository, userRepository, modelMapper);
     }
 
     @Test

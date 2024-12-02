@@ -27,6 +27,7 @@ public class PortfolioService {
     private final StockPriceRepository stockPriceRepository;
 
     private final UserRepository userRepository;
+
     private final ModelMapper modelMapper;
 
     @Transactional
