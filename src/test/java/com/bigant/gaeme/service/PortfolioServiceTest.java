@@ -1,10 +1,7 @@
 package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.dto.*;
-import com.bigant.gaeme.repository.PortfolioRepository;
-import com.bigant.gaeme.repository.PortfolioStockRepository;
-import com.bigant.gaeme.repository.StockPriceRepository;
-import com.bigant.gaeme.repository.StockRepository;
+import com.bigant.gaeme.repository.*;
 import com.bigant.gaeme.repository.entity.*;
 import com.bigant.gaeme.repository.enums.StockType;
 import java.time.LocalDate;
@@ -29,18 +26,22 @@ public class PortfolioServiceTest {
 
     private final StockPriceRepository stockPriceRepository;
 
+    private final UserRepository userRepository;
+
     @Autowired
     public PortfolioServiceTest(
             PortfolioRepository portfolioRepository,
             StockRepository stockRepository,
             PortfolioStockRepository portfolioStockRepository,
-            StockPriceRepository stockPriceRepository
+            StockPriceRepository stockPriceRepository,
+            UserRepository userRepository
     ) {
         this.portfolioRepository = portfolioRepository;
         this.stockRepository = stockRepository;
         this.portfolioStockRepository = portfolioStockRepository;
         this.stockPriceRepository = stockPriceRepository;
-        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository);
+        this.userRepository = userRepository;
+        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository, userRepository);
     }
 
     @Test
