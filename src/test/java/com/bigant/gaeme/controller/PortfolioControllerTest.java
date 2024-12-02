@@ -8,18 +8,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.config.InterceptorTestConfig;
 import com.bigant.gaeme.dto.*;
-import com.bigant.gaeme.repository.entity.Stock;
-import com.bigant.gaeme.repository.entity.StockPrice;
-import com.bigant.gaeme.repository.entity.UsStock;
-import com.bigant.gaeme.repository.enums.StockType;
 import com.bigant.gaeme.service.PortfolioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -47,6 +43,9 @@ public class PortfolioControllerTest {
 
     @MockBean
     private PortfolioService portfolioService;
+
+    @MockBean
+    private JwtBuilder jwtBuilder;
 
     @Autowired
     private MockMvc mockMvc;
