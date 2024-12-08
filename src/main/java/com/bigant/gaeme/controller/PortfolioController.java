@@ -28,7 +28,7 @@ public class PortfolioController {
         return portfolioService.backtest(dto);
     }
 
-    @GetMapping("?type=my")
+    @GetMapping(params = "type=my")
     public List<PortfolioDto> getMine(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return portfolioService.getMine(jwtBuilder.decryptJwt(token));
     }
