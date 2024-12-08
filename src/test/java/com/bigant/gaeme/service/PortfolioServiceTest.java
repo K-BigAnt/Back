@@ -227,4 +227,33 @@ public class PortfolioServiceTest {
         ), result);
     }
 
+    @Test
+    void 포트폴리오_삭제_성공() {
+        //given
+        User user = TestFixture.getTestUser();
+        Portfolio portfolio = TestFixture.getTestPortfolio(user);
+        Stock stock = TestFixture.getTestStock();
+
+        userRepository.save(user);
+        portfolioRepository.save(portfolio);
+        stockRepository.save(stock);
+        portfolioStockRepository.save(PortfolioStock.builder()
+                        .rate(100)
+                        .portfolio(portfolio)
+                        .stock(stock)
+                .build());
+
+        //when
+        PortfolioDto result = portfolioService.delete(user.getId(), portfolio.getId());
+
+        //then
+        Assertions.assertEquals(
+                PortfolioDto.builder()
+                        .name("test-portfolio")
+                        .stocks(List.of())
+                        .isDeleted(true)
+                        .build(), result
+        );
+    }
+
 }
