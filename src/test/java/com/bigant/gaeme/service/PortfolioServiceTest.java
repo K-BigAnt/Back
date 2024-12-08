@@ -1,6 +1,8 @@
 package com.bigant.gaeme.service;
 
+import com.bigant.gaeme.TestFixture;
 import com.bigant.gaeme.dto.*;
+import com.bigant.gaeme.modelmapper.PortfolioStockToDto;
 import com.bigant.gaeme.repository.*;
 import com.bigant.gaeme.repository.entity.*;
 import com.bigant.gaeme.repository.enums.StockType;
@@ -45,6 +47,7 @@ public class PortfolioServiceTest {
         this.stockPriceRepository = stockPriceRepository;
         this.userRepository = userRepository;
         this.modelMapper = new ModelMapper();
+        this.modelMapper.addConverter(new PortfolioStockToDto());
         this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository, userRepository, modelMapper);
     }
 
@@ -169,6 +172,52 @@ public class PortfolioServiceTest {
                         ))
                         .build(), result
         );
+    }
+
+    @Test
+    void 내_포트폴리오_조회_성공_포트폴리오_없음() {
+        //given
+        User user = TestFixture.getTestUser();
+        userRepository.save(user);
+
+        //when
+        List<Portfolio> result = portfolioRepository.findAllByUser_Id(user.getId());
+
+        //then
+        Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void 내_포트폴리오_조회_성공_포트폴리오_있음() {
+        //given
+        User user = TestFixture.getTestUser();
+        Portfolio portfolio = TestFixture.getTestPortfolio(user);
+        Stock stock = TestFixture.getTestStock();
+
+        portfolioRepository.save(portfolio);
+        stockRepository.save(stock);
+        portfolioStockRepository.save(PortfolioStock.builder()
+                        .portfolio(portfolio)
+                        .stock(stock)
+                        .rate(100)
+                .build());
+        userRepository.save(user);
+
+        //when
+        List<PortfolioDto> result = portfolioService.getMine(user.getId());
+
+        //then
+        Assertions.assertEquals(List.of(
+                PortfolioDto.builder()
+                        .name("test-portfolio")
+                        .stocks(List.of(
+                                PortfolioDto.PortfolioStockDto.builder()
+                                        .symbol(stock.getSymbol())
+                                        .rate(100)
+                                        .build()
+                        ))
+                        .build()
+        ), result);
     }
 
 }
