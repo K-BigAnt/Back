@@ -6,6 +6,7 @@ import com.bigant.gaeme.repository.entity.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -128,5 +129,22 @@ public class PortfolioService {
         };
 
         return portfolioStocksByPortfolio.entrySet().stream().map(convertDto).toList();
+    }
+
+    @Transactional
+    public PortfolioDto delete(Long requestId, Long portfolioId) {
+        User user = userRepository.findById(requestId).orElseThrow();
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow();
+
+        if (!Objects.equals(portfolio.getUser().getId(), user.getId())) {
+            throw new IllegalStateException("리소스를 삭제할 권한이 없습니다");
+        }
+
+        portfolio.setIsDeleted(true);
+        return PortfolioDto.builder()
+                .name(portfolio.getName())
+                .stocks(List.of())
+                .isDeleted(true)
+                .build();
     }
 }

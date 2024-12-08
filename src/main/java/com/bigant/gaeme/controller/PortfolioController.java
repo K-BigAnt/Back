@@ -33,4 +33,12 @@ public class PortfolioController {
         return portfolioService.getMine(jwtBuilder.decryptJwt(token));
     }
 
+    @DeleteMapping
+    public PortfolioDto delete(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestParam Long id
+    ) {
+        return portfolioService.delete(jwtBuilder.decryptJwt(token), id);
+    }
+
 }
