@@ -48,7 +48,14 @@ public class PortfolioServiceTest {
         this.userRepository = userRepository;
         this.modelMapper = new ModelMapper();
         this.modelMapper.addConverter(new PortfolioStockToDto());
-        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository, userRepository, modelMapper);
+        this.portfolioService = new PortfolioService(
+                portfolioRepository,
+                stockRepository,
+                portfolioStockRepository,
+                stockPriceRepository,
+                userRepository,
+                modelMapper
+        );
     }
 
     @Test
@@ -175,7 +182,7 @@ public class PortfolioServiceTest {
     }
 
     @Test
-    void 내_포트폴리오_조회_성공_포트폴리오_없음() {
+    void 내포트폴리오_조회_성공_포트폴리오_없음() {
         //given
         User user = TestFixture.getTestUser();
         userRepository.save(user);
@@ -188,7 +195,7 @@ public class PortfolioServiceTest {
     }
 
     @Test
-    void 내_포트폴리오_조회_성공_포트폴리오_있음() {
+    void 내포트폴리오_조회_성공_포트폴리오_있음() {
         //given
         User user = TestFixture.getTestUser();
         Portfolio portfolio = TestFixture.getTestPortfolio(user);
