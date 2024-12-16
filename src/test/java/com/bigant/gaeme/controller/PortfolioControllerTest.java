@@ -8,18 +8,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bigant.gaeme.component.JwtBuilder;
 import com.bigant.gaeme.config.InterceptorTestConfig;
 import com.bigant.gaeme.dto.*;
-import com.bigant.gaeme.repository.entity.Stock;
-import com.bigant.gaeme.repository.entity.StockPrice;
-import com.bigant.gaeme.repository.entity.UsStock;
-import com.bigant.gaeme.repository.enums.StockType;
 import com.bigant.gaeme.service.PortfolioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -30,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -47,6 +44,9 @@ public class PortfolioControllerTest {
 
     @MockBean
     private PortfolioService portfolioService;
+
+    @MockBean
+    private JwtBuilder jwtBuilder;
 
     @Autowired
     private MockMvc mockMvc;
@@ -178,6 +178,43 @@ public class PortfolioControllerTest {
                         fieldWithPath("initialAmount").type(JsonFieldType.NUMBER).description("초기 투자금"),
                         fieldWithPath("rebalanced").type(JsonFieldType.BOOLEAN).description("리밸런싱 여부")
                 )
+        );
+    }
+
+    @Test
+    void getMine() throws Exception {
+        //given
+        BDDMockito.given(portfolioService.getMine(BDDMockito.any())).willReturn(
+                List.of(
+                        PortfolioDto.builder()
+                                .name("test-portfolio")
+                                .stocks(List.of(
+                                        PortfolioDto.PortfolioStockDto.builder()
+                                                .symbol("test")
+                                                .rate(100)
+                                                .build()
+                                ))
+                                .build()
+                )
+        );
+
+        //when
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/v1/portfolio?type=my")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .characterEncoding(StandardCharsets.UTF_8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getMyPortfolioGetHandler());
+
+        //then
+        BDDMockito.then(portfolioService).should().getMine(BDDMockito.any());
+    }
+
+    RestDocumentationResultHandler getMyPortfolioGetHandler() {
+        return document("my-portfolio/get",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())
         );
     }
 

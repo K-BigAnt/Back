@@ -3,5 +3,8 @@
 === 포트폴리오 생성
 operation::portfolio/post[snippets="http-request,http-response,request-fields"]
 
+=== 내 포트폴리오 조회
+operation::my-portfolio/get[snippets="http-request,http-response"]
+
 === 백테스트 조회
 operation::portfolio/get[snippets="http-request,http-response,request-fields"]

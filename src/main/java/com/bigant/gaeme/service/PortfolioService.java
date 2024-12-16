@@ -1,21 +1,18 @@
 package com.bigant.gaeme.service;
 
 import com.bigant.gaeme.dto.*;
-import com.bigant.gaeme.repository.PortfolioRepository;
-import com.bigant.gaeme.repository.PortfolioStockRepository;
-import com.bigant.gaeme.repository.StockPriceRepository;
-import com.bigant.gaeme.repository.StockRepository;
-import com.bigant.gaeme.repository.entity.Portfolio;
-import com.bigant.gaeme.repository.entity.PortfolioStock;
-import com.bigant.gaeme.repository.entity.Stock;
-import com.bigant.gaeme.repository.entity.StockPrice;
-import jakarta.transaction.Transactional;
+import com.bigant.gaeme.repository.*;
+import com.bigant.gaeme.repository.entity.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +25,10 @@ public class PortfolioService {
     private final PortfolioStockRepository portfolioStockRepository;
 
     private final StockPriceRepository stockPriceRepository;
+
+    private final UserRepository userRepository;
+
+    private final ModelMapper modelMapper;
 
     @Transactional
     public List<Long> createPortfolio(List<CreatePortfolioRequestDto> dtos) {
@@ -105,5 +106,27 @@ public class PortfolioService {
                     .build());
         }
         return results;
+    }
+
+    @Transactional(readOnly = true)
+    public List<PortfolioDto> getMine(Long requestId) {
+        User user = userRepository.findById(requestId).orElseThrow();
+
+        List<Portfolio> portfolios = portfolioRepository.findAllByUser_Id(user.getId());
+        Map<Portfolio, List<PortfolioStock>> portfolioStocksByPortfolio = portfolios.stream().collect(Collectors.toMap(
+                Function.identity(), portfolio -> portfolioStockRepository.findAllByPortfolio_Id(portfolio.getId())
+        ));
+
+        Function<Map.Entry<Portfolio, List<PortfolioStock>>, PortfolioDto> convertDto = (entry) -> {
+            Portfolio portfolio = entry.getKey();
+            List<PortfolioStock> portfolioStocks = entry.getValue();
+
+            return PortfolioDto.builder()
+                    .name(portfolio.getName())
+                    .stocks(portfolioStocks.stream().map(stocks -> modelMapper.map(stocks, PortfolioDto.PortfolioStockDto.class)).toList())
+                    .build();
+        };
+
+        return portfolioStocksByPortfolio.entrySet().stream().map(convertDto).toList();
     }
 }

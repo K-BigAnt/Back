@@ -1,16 +1,16 @@
 package com.bigant.gaeme.service;
 
+import com.bigant.gaeme.TestFixture;
 import com.bigant.gaeme.dto.*;
-import com.bigant.gaeme.repository.PortfolioRepository;
-import com.bigant.gaeme.repository.PortfolioStockRepository;
-import com.bigant.gaeme.repository.StockPriceRepository;
-import com.bigant.gaeme.repository.StockRepository;
+import com.bigant.gaeme.modelmapper.PortfolioStockToDto;
+import com.bigant.gaeme.repository.*;
 import com.bigant.gaeme.repository.entity.*;
 import com.bigant.gaeme.repository.enums.StockType;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -29,18 +29,33 @@ public class PortfolioServiceTest {
 
     private final StockPriceRepository stockPriceRepository;
 
+    private final UserRepository userRepository;
+
+    private final ModelMapper modelMapper;
+
     @Autowired
     public PortfolioServiceTest(
             PortfolioRepository portfolioRepository,
             StockRepository stockRepository,
             PortfolioStockRepository portfolioStockRepository,
-            StockPriceRepository stockPriceRepository
+            StockPriceRepository stockPriceRepository,
+            UserRepository userRepository
     ) {
         this.portfolioRepository = portfolioRepository;
         this.stockRepository = stockRepository;
         this.portfolioStockRepository = portfolioStockRepository;
         this.stockPriceRepository = stockPriceRepository;
-        this.portfolioService = new PortfolioService(portfolioRepository, stockRepository, portfolioStockRepository, stockPriceRepository);
+        this.userRepository = userRepository;
+        this.modelMapper = new ModelMapper();
+        this.modelMapper.addConverter(new PortfolioStockToDto());
+        this.portfolioService = new PortfolioService(
+                portfolioRepository,
+                stockRepository,
+                portfolioStockRepository,
+                stockPriceRepository,
+                userRepository,
+                modelMapper
+        );
     }
 
     @Test
@@ -164,6 +179,52 @@ public class PortfolioServiceTest {
                         ))
                         .build(), result
         );
+    }
+
+    @Test
+    void 내포트폴리오_조회_성공_포트폴리오_없음() {
+        //given
+        User user = TestFixture.getTestUser();
+        userRepository.save(user);
+
+        //when
+        List<Portfolio> result = portfolioRepository.findAllByUser_Id(user.getId());
+
+        //then
+        Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void 내포트폴리오_조회_성공_포트폴리오_있음() {
+        //given
+        User user = TestFixture.getTestUser();
+        Portfolio portfolio = TestFixture.getTestPortfolio(user);
+        Stock stock = TestFixture.getTestStock();
+
+        portfolioRepository.save(portfolio);
+        stockRepository.save(stock);
+        portfolioStockRepository.save(PortfolioStock.builder()
+                        .portfolio(portfolio)
+                        .stock(stock)
+                        .rate(100)
+                .build());
+        userRepository.save(user);
+
+        //when
+        List<PortfolioDto> result = portfolioService.getMine(user.getId());
+
+        //then
+        Assertions.assertEquals(List.of(
+                PortfolioDto.builder()
+                        .name("test-portfolio")
+                        .stocks(List.of(
+                                PortfolioDto.PortfolioStockDto.builder()
+                                        .symbol(stock.getSymbol())
+                                        .rate(100)
+                                        .build()
+                        ))
+                        .build()
+        ), result);
     }
 
 }
