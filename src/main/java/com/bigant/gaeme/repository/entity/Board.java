@@ -1,5 +1,6 @@
 package com.bigant.gaeme.repository.entity;
 
+import com.bigant.gaeme.dto.BoardUpdateRequestDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,14 @@ public class Board {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     private boolean isDeleted;
+
+    public void update(BoardUpdateRequestDto updateDto) {
+        if (updateDto.getContent() != null) {
+            this.content = updateDto.getContent();
+        }
+        if (updateDto.getLikeCnt() != null) {
+            this.likeCnt = updateDto.getLikeCnt();
+        }
+    }
 
 }

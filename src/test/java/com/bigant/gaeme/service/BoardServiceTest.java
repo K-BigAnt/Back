@@ -285,4 +285,36 @@ public class BoardServiceTest {
         ), result.getContent());
     }
 
+    @Test
+    void 보드_업데이트_성공() {
+        //given
+
+        User user = TestFixture.getTestUser();
+        Board board = TestFixture.getTestBoard(user);
+
+        userRepository.save(user);
+        boardRepository.save(board);
+
+        BoardUpdateRequestDto request = BoardUpdateRequestDto.builder()
+                .id(board.getId())
+                .content("update")
+                .likeCnt(100L)
+                .build();
+
+        //when
+        BoardDto result = boardService.update(user.getId(), request);
+
+        //then
+        Assertions.assertEquals(result, BoardDto.builder()
+                        .createdAt(result.getCreatedAt())
+                        .updatedAt(result.getUpdatedAt())
+                        .pictureUrls(List.of())
+                        .likeCnt(100L)
+                        .content("update")
+                        .id(result.getId())
+                        .isDeleted(false)
+                        .user(modelMapper.map(user, UserDto.class))
+                .build());
+    }
+
 }

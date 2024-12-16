@@ -54,4 +54,12 @@ public class BoardController {
         return boardService.readDefault(pageable, ancestorId);
     }
 
+    @PatchMapping
+    public BoardDto update(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+            @RequestBody BoardUpdateRequestDto dto
+    ) {
+        return boardService.update(jwtBuilder.decryptJwt(token), dto);
+    }
+
 }

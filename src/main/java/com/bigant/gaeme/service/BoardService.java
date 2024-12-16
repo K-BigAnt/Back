@@ -9,6 +9,7 @@ import com.bigant.gaeme.repository.entity.BoardTreePath;
 import com.bigant.gaeme.repository.entity.User;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -67,6 +68,7 @@ public class BoardService {
         return boardTreePathRepository.save(boardTreePath);
     }
 
+    @Transactional
     public BoardDto deleteBoard(Long requestId, BoardDeleteRequestDto dto) {
         User user = userRepository.findById(requestId).orElseThrow();
         Board board = boardRepository.findById(dto.getBoardId()).orElseThrow();
@@ -100,5 +102,17 @@ public class BoardService {
         Slice<Board> boards = boardRepository.findAllBy(pageable);
 
         return new SliceImpl<>(boards.stream().map(board -> modelMapper.map(board, BoardDto.class)).toList(), pageable, boards.hasNext());
+    }
+
+    @Transactional
+    public BoardDto update(Long requesterId, BoardUpdateRequestDto dto) {
+        Board board = boardRepository.findById(dto.getId()).orElseThrow();
+
+        if (!Objects.equals(requesterId, board.getUser().getId())) {
+            throw new IllegalArgumentException("해당 리소스에 접근 권한이 없습니다.");
+        }
+
+        board.update(dto);
+        return modelMapper.map(board, BoardDto.class);
     }
 }
