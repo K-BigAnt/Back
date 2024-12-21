@@ -221,7 +221,7 @@ public class BoardControllerTest {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 queryParameters(parameterWithName("pageNum").description("조회할 페이지 번호"),
-                        parameterWithName("ancestorId").description("댓글 조회시 부모 보드 아이디"))
+                        parameterWithName("ancestorId").optional().description("댓글 조회시 부모 보드 아이디"))
         );
     }
 
@@ -271,6 +271,50 @@ public class BoardControllerTest {
                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 내용"),
                         fieldWithPath("likeCnt").type(JsonFieldType.NUMBER).description("게시글 좋아요 수")
                 )
+        );
+    }
+
+    @Test
+    void getMyBoard() throws Exception {
+        //given
+        User testUser = TestFixture.getTestUser();
+        BDDMockito.given(boardService.readMine(BDDMockito.any(), BDDMockito.any())).willReturn(
+                new SliceImpl<>(
+                        List.of(
+                                BoardDto.builder()
+                                        .user(modelMapper.map(testUser, UserDto.class))
+                                        .id(2L)
+                                        .content("cccccc")
+                                        .likeCnt(0L)
+                                        .createdAt(LocalDateTime.now())
+                                        .updatedAt(LocalDateTime.now())
+                                        .isDeleted(false)
+                                        .pictureUrls(List.of())
+                                        .build()
+                        ),
+                        PageRequest.of(1, 10, Sort.Direction.DESC, "createdAt"),
+                        false
+                )
+        );
+
+        //when
+        mvc.perform(get("/v1/board")
+                        .param("pageNum", "1")
+                        .header(HttpHeaders.AUTHORIZATION, "token"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getMyBoardGetResultHandler());
+
+        //then
+        BDDMockito.then(boardService).should().readMine(BDDMockito.any(), BDDMockito.any());
+    }
+
+    private RestDocumentationResultHandler getMyBoardGetResultHandler() {
+        return document("my-board/get",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                queryParameters(parameterWithName("pageNum").description("조회할 페이지 번호"),
+                        parameterWithName("ancestorId").optional().description("댓글 조회시 부모 보드 아이디"))
         );
     }
 

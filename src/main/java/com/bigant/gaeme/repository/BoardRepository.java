@@ -11,4 +11,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Slice<Board> findAllBy(Pageable pageable);
 
+    Slice<Board> findAllByUser_Id(Long userId, Pageable pageable);
+
 }

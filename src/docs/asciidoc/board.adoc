@@ -9,5 +9,8 @@ operation::board/delete[snippets="http-request,http-response,request-fields"]
 === 게시글 조회
 operation::board/get[snippets="http-request,http-response,query-parameters"]
 
+=== 내 게시글 조회
+operation::my-board/get[snippets="http-request,http-response,query-parameters"]
+
 === 게시글 수정
 operation::board/patch[snippets="http-request,http-response,request-fields"]

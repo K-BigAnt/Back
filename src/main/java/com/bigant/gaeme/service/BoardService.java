@@ -89,6 +89,12 @@ public class BoardService {
         return recentBoard(pageable);
     }
 
+    public Slice<BoardDto> readMine(Pageable pageable, Long requestId) {
+        Slice<Board> boards = boardRepository.findAllByUser_Id(requestId, pageable);
+
+        return new SliceImpl<>(boards.stream().map(board -> modelMapper.map(board, BoardDto.class)).toList(), pageable, boards.hasNext());
+    }
+
     private Slice<BoardDto> readDescendant(Pageable pageable, Long ancestorId) {
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
         Slice<BoardTreePath> boardTreePaths = boardTreePathRepository.findAllByAncestor_Id(ancestorId, newPageable);
@@ -115,4 +121,5 @@ public class BoardService {
         board.update(dto);
         return modelMapper.map(board, BoardDto.class);
     }
+
 }
