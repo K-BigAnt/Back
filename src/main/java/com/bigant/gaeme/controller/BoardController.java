@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -49,8 +50,12 @@ public class BoardController {
     @GetMapping
     public Slice<BoardDto> read(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) Optional<Long> ancestorId
+            @RequestParam(required = false) Optional<Long> ancestorId,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) Optional<String> token
     ) {
+        if (token.isPresent()) {
+            return boardService.readMine(pageable, ancestorId, jwtBuilder.decryptJwt(token.get()));
+        }
         return boardService.readDefault(pageable, ancestorId);
     }
 

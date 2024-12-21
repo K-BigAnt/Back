@@ -10,4 +10,6 @@ public interface BoardTreePathRepository extends JpaRepository<BoardTreePath, Lo
 
     Slice<BoardTreePath> findAllByAncestor_Id(Long boardId, Pageable pageable);
 
+    Slice<BoardTreePath> findAllByAncestor_IdAndAncestor_User_Id(Long boardId, Long userId, Pageable pageable);
+
 }
