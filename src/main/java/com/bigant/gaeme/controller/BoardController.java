@@ -53,8 +53,8 @@ public class BoardController {
             @RequestParam(required = false) Optional<Long> ancestorId,
             @RequestHeader(HttpHeaders.AUTHORIZATION) Optional<String> token
     ) {
-        if (token.isPresent()) {
-            return boardService.readMine(pageable, ancestorId, jwtBuilder.decryptJwt(token.get()));
+        if (ancestorId.isEmpty() && token.isPresent()) {
+            return boardService.readMine(pageable, jwtBuilder.decryptJwt(token.get()));
         }
         return boardService.readDefault(pageable, ancestorId);
     }

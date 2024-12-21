@@ -89,7 +89,7 @@ public class BoardService {
         return recentBoard(pageable);
     }
 
-    public Slice<BoardDto> readMine(Pageable pageable, Optional<Long> ancestorId, Long requestId) {
+    public Slice<BoardDto> readMine(Pageable pageable, Long requestId) {
         Slice<Board> boards = boardRepository.findAllByUser_Id(requestId, pageable);
 
         return new SliceImpl<>(boards.stream().map(board -> modelMapper.map(board, BoardDto.class)).toList(), pageable, boards.hasNext());
