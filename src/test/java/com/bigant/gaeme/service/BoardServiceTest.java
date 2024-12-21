@@ -313,7 +313,7 @@ public class BoardServiceTest {
     }
 
     @Test
-    void 내_게시글_조회_성공() {
+    void 본인_게시글_조회_성공() {
         //given
         User mine = TestFixture.getTestUser();
         User another = TestFixture.getTestUser();
