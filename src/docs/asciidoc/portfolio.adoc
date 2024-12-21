@@ -3,6 +3,9 @@
 === 포트폴리오 생성
 operation::portfolio/post[snippets="http-request,http-response,request-fields"]
 
+=== 포트폴리오 삭제
+operation::portfolio/delete[snippetes="http-request,http-response"]
+
 === 내 포트폴리오 조회
 operation::my-portfolio/get[snippets="http-request,http-response"]
 

@@ -16,6 +16,9 @@ public class PortfolioDto {
 
     private List<PortfolioStockDto> stocks;
 
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

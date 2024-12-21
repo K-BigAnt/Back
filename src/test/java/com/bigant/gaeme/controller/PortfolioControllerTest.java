@@ -171,6 +171,7 @@ public class PortfolioControllerTest {
                 requestFields(fieldWithPath("portfolio").type(JsonFieldType.OBJECT).description("포트폴리오"),
                         fieldWithPath("portfolio.name").type(JsonFieldType.STRING).description("포트폴리오 이름"),
                         fieldWithPath("portfolio.stocks").type(JsonFieldType.ARRAY).description("보유 주식"),
+                        fieldWithPath("portfolio.deleted").type(JsonFieldType.BOOLEAN).description("삭제 여부"),
                         fieldWithPath("portfolio.stocks.[].symbol").type(JsonFieldType.STRING).description("주식 심볼"),
                         fieldWithPath("portfolio.stocks.[].rate").type(JsonFieldType.NUMBER).description("주식 비중"),
                         fieldWithPath("startDate").type(JsonFieldType.STRING).description("시작 날짜"),
@@ -213,6 +214,37 @@ public class PortfolioControllerTest {
 
     RestDocumentationResultHandler getMyPortfolioGetHandler() {
         return document("my-portfolio/get",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint())
+        );
+    }
+
+    @Test
+    void delete() throws Exception {
+        //given
+        BDDMockito.given(portfolioService.delete(BDDMockito.any(), BDDMockito.any())).willReturn(
+            PortfolioDto.builder()
+                    .name("test-portfolio")
+                    .stocks(List.of())
+                    .isDeleted(true)
+                    .build()
+        );
+
+        //when
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/v1/portfolio?id=1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                        .characterEncoding(StandardCharsets.UTF_8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(getPortfolioDeleteHandler());
+
+        //then
+        BDDMockito.then(portfolioService).should().delete(BDDMockito.any(), BDDMockito.any());
+    }
+
+    RestDocumentationResultHandler getPortfolioDeleteHandler() {
+        return document("portfolio/delete",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint())
         );

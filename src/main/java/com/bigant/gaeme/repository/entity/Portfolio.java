@@ -19,6 +19,8 @@ public class Portfolio {
 
     private String name;
 
+    private Boolean isDeleted;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
